@@ -1,0 +1,8 @@
+{
+    "${mod.id}:TargetedEliminationPower": {
+        "NAME": "定点清算",
+        "DESCRIPTIONS": [
+            "%1$s 受到的来自 #y炸弹 的伤害增加 %2$d%%"
+        ]
+    }
+}

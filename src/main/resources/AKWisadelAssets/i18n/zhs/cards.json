@@ -1,0 +1,17 @@
+{
+    "!{CaseSensitiveCardIDWithoutModID}.{CaseSensitiveFieldName}": "Text",
+    "Strike_EW.Name": "打击",
+    "Strike_EW.Desc": "造成 !D! 点伤害。",
+    "Defend_EW.Name": "防御", 
+    "Defend_EW.Desc": "获得 !B! 点 格挡 。",
+    "HomemadeBomb.Name": "土质炸弹",
+    "HomemadeBomb.Desc": "${mod.id}:插槽 !${mod.id}:slot! NL 造成 !D! 点伤害。",
+    "SmokeGrenade.Name": "烟雾弹",
+    "SmokeGrenade.Desc": "将 !M! 张 *烟尘掩护 置入手牌。",
+    "FirstRevenant.Name": "魂灵之始",
+    "FirstRevenant.Desc": "召唤一个 ${mod.id}:魂灵之影 ，并立即触发其 !M! 次。 消耗 。",
+    "DustAndSmoke.Name": "烟尘掩护",
+    "DustAndSmoke.Desc": "${mod.id}:零件 NL 获得 !B! 点 格挡 。被 ${mod.id}:炸弹 选中时，获得 !M! 点 格挡 。",
+    "TargetedElimination.Name": "定点清算",
+    "TargetedElimination.Desc": "造成 !D! 点伤害，目标下次受到的来自 ${mod.id}:炸弹 的伤害翻倍。"
+}

@@ -1,0 +1,29 @@
+package rs.moranzc.akwisadel.core;
+
+import basemod.AutoAdd;
+import basemod.BaseMod;
+import rs.moranzc.akwisadel.base.EWCardBase;
+import rs.moranzc.akwisadel.cards.wisadel.Strike_EW;
+import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
+
+import java.util.*;
+
+public final class CardMst {
+    
+    private static final Map<String, EWCardBase> card_map = new HashMap<>();
+    private static final Set<String> parts = new HashSet<>();
+    
+    public static void Initialize() {
+        new AutoAdd(Kazdel.MOD_ID)
+                .packageFilter(Strike_EW.class)
+                .any(EWCardBase.class, (i, c) -> addCard(c));
+        Kazdel.logger.info("{} cards added!", card_map.values().size());
+    }
+    
+    private static void addCard(EWCardBase card) {
+        card_map.put(card.cardID, card);
+        if (card instanceof IPartCard)
+            parts.add(card.cardID);
+        BaseMod.addCard(card.makeCopy());
+    }
+}

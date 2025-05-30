@@ -1,0 +1,13 @@
+{
+    "modid": "${mod.id}",
+    "name": "${mod.name}",
+    "author_list": [
+        "墨染_zc"
+    ],
+    "description": "添加了一位原创角色：迷途者-蓝，一名寻求晋升的“法师”。他带来了75+32张卡牌与10件新的遗物。",
+    "version": "${project.version}",
+    "sts_version": "${SlayTheSpire.version}",
+    "mts_version": "${ModTheSpire.version}",
+    "dependencies": ["basemod"],
+    "credits": "设计/策划: 墨染_zc、南极\n代码: Somdy"
+}
