@@ -8,5 +8,4 @@ public class CardUtils {
     public static boolean IsPart(AbstractCard card) {
         return card instanceof IPartCard;
     }
-
 }

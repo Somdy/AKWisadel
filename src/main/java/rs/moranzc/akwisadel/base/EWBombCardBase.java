@@ -1,11 +1,16 @@
 package rs.moranzc.akwisadel.base;
 
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import rs.moranzc.akwisadel.actions.utility.DamageCardsOnBombAction;
 import rs.moranzc.akwisadel.cards.BombCardMgr;
+import rs.moranzc.akwisadel.core.Kazdel;
+import rs.moranzc.akwisadel.utils.DamageUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,5 +66,37 @@ public abstract class EWBombCardBase extends EWCardBase {
         baseSlot += delta;
         slot = baseSlot;
         upgradedSlot = true;
+    }
+
+    @Override
+    protected void addToBot(AbstractGameAction action) {
+        try {
+            tryAddCardFromToDamageInfoOfAction(action);
+        } catch (IllegalAccessException e) {
+            Kazdel.logger.info("Failed to add information to action {}", action.getClass().getSimpleName());
+        }
+        super.addToBot(action);
+    }
+
+    @Override
+    protected void addToTop(AbstractGameAction action) {
+        try {
+            tryAddCardFromToDamageInfoOfAction(action);
+        } catch (IllegalAccessException e) {
+            Kazdel.logger.info("Failed to add information to action {}", action.getClass().getSimpleName());
+        }
+        super.addToTop(action);
+    }
+
+    private void tryAddCardFromToDamageInfoOfAction(AbstractGameAction action) throws IllegalAccessException {
+        Field[] fields = action.getClass().getDeclaredFields();
+        for (Field f : fields) {
+            if (f.getDeclaringClass().isAssignableFrom(DamageInfo.class)) {
+                f.setAccessible(true);
+                DamageInfo info = (DamageInfo) f.get(action);
+                DamageUtils.AddCardFromToDamageInfo(info, this);
+                f.set(action, info);
+            }
+        }
     }
 }

@@ -13,5 +13,13 @@
     "DustAndSmoke.Name": "烟尘掩护",
     "DustAndSmoke.Desc": "${mod.id}:零件 NL 获得 !B! 点 格挡 。被 ${mod.id}:炸弹 选中时，获得 !M! 点 格挡 。",
     "TargetedElimination.Name": "定点清算",
-    "TargetedElimination.Desc": "造成 !D! 点伤害，目标下次受到的来自 ${mod.id}:炸弹 的伤害翻倍。"
+    "TargetedElimination.Desc": "造成 !D! 点伤害，目标下次受到的来自 ${mod.id}:炸弹 的伤害翻倍。",
+    "FreshBlood.Name": "新鲜血液",
+    "FreshBlood.Desc": "${mod.id}:零件 NL 造成 !D! 点伤害，在弃牌堆放入一张此牌的复制。 NL 被 ${mod.id}:炸弹 选中时，在本场战斗中增加对应炸弹 !M! 点伤害。",
+    "IndiscriminateBombing.Name": "无差别轰炸",
+    "IndiscriminateBombing.Desc": "对所有敌人造成 !D! 5点伤害 !M! 2/3次。 NL 每有一个敌人，随机 ${mod.id}:损毁 一张牌。",
+    "PerfectedBomb.Name": "“完美”炸弹",
+    "PerfectedBomb.Desc": "${mod.id}:插槽 !${mod.id}:slot! 2 NL 造成 !D! 6点伤害。 NL 你每有一张名字中带有炸弹的牌，伤害加 !M! 6/9.",
+    "Exploit.Name": "压榨",
+    "Exploit.Desc": "造成 !D! 10/13点伤害。 NL 抽取弃牌堆 !M! 1/2张 ${mod.id}:损毁 的牌。"
 }

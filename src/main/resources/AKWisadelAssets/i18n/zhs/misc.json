@@ -1,4 +1,5 @@
 {
     "tip.DamagedCardMod.title": "已损毁",
-    "tip.DamagedCardMod.desc": "这张牌在打出或者再次损毁时，会 #y消耗 。"
+    "tip.DamagedCardMod.desc": "这张牌在打出或者再次损毁时，会 #y消耗 。",
+    "PronYouPlayer": "你"
 }

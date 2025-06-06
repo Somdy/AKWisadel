@@ -1,8 +1,14 @@
 {
+    "${mod.id}:GiftPower": {
+        "NAME": "好礼",
+        "DESCRIPTIONS": [
+            "造成的伤害减少 #b%1$d%% .  #y炸弹 会引爆所有好礼，并造成 #b%2$%d 点伤害。"
+        ]
+    },
     "${mod.id}:TargetedEliminationPower": {
         "NAME": "定点清算",
         "DESCRIPTIONS": [
-            "%1$s 受到的来自 #y炸弹 的伤害增加 %2$d%%"
+            "受到的来自 #y炸弹 的伤害增加 %1$d%%"
         ]
     }
 }

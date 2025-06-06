@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public final class I18nManager {
     private static final Map<String, LocaleTip> misc_tip_map = new HashMap<>();
+    private static final Map<String, String> misc_text_map = new HashMap<>();
     private static final Map<String, EWCardStrings> card_map = new HashMap<>();
     
     private static final Gson gson = new Gson();
@@ -31,6 +32,8 @@ public final class I18nManager {
                     .filter(e -> "tip".equals(e.getKey().split("\\.")[0]))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             JsonProcessor.ProcessTip(rawTips, misc_tip_map);
+            rawTips.forEach((k,v) -> rawMap.remove(k));
+            misc_text_map.putAll(rawMap);
         }
     }
 
@@ -50,6 +53,20 @@ public final class I18nManager {
     
     public static LocaleTip GetTip(String key) {
         return misc_tip_map.get(key);
+    }
+    
+    public static String MT(String key, Object... args) {
+        String text = misc_text_map.getOrDefault(key, String.format("Missing Text for [%s]", key));
+        try {
+            text = String.format(text, args);
+        } catch (Exception e) {
+            Kazdel.logger.error("Unable to format string \"{}\": {}", text, e.getMessage());
+        }
+        return text;
+    }
+    
+    public static String MT(String key) {
+        return misc_text_map.getOrDefault(key, String.format("Missing Text for [%s]", key));
     }
     
     public static final class JsonProcessor {

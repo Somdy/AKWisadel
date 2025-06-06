@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.cards.BombCardMgr;
+import rs.moranzc.akwisadel.cards.modifiers.DamagedCardModifier;
 import rs.moranzc.akwisadel.cards.modifiers.SlotIntoBombCardModifier;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 
@@ -40,9 +41,11 @@ public class DamageCardsOnBombAction extends AbstractGameAction {
         if (duration == startDuration) {
             cardsToDamage.forEach(c -> {
                 CardModifierManager.removeModifiersById(c, SlotIntoBombCardModifier.ID, true);
-                if (c instanceof IPartCard) {
+                // Parts and Damaged ones go to Exhaust pile and rest
+                if (c instanceof IPartCard || CardModifierManager.hasModifier(c, DamagedCardModifier.ID)) {
                     p.hand.moveToExhaustPile(c);
                 } else {
+                    CardModifierManager.addModifier(c, new DamagedCardModifier());
                     p.hand.moveToDiscardPile(c);
                 }
             });

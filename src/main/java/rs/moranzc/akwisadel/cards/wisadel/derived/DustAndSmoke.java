@@ -1,6 +1,7 @@
 package rs.moranzc.akwisadel.cards.wisadel.derived;
 
 import basemod.patches.com.megacrit.cardcrawl.screens.compendium.CardLibraryScreen.NoCompendium;
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -32,6 +33,6 @@ public class DustAndSmoke extends EWCardBase implements IPartCard {
 
     @Override
     public void onAppliedOnBomb(EWBombCardBase card, AbstractPlayer s, AbstractCreature t, float slotEfficiency) {
-        addToBot(new GainBlockAction(s, s, magicNumber));
+        addToBot(new GainBlockAction(s, s, MathUtils.floor(magicNumber * slotEfficiency) ));
     }
 }

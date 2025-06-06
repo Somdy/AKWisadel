@@ -6,7 +6,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import rs.moranzc.akwisadel.actions.common.SummonRevenantAction;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
+import rs.moranzc.akwisadel.characters.Revenant;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class FirstRevenant extends EWBombCardBase {
     @Override
     public void onUse(AbstractPlayer s, AbstractCreature t, List<AbstractCard> cardsToDamage) {
         addToBot(new DamageAction(t, new DamageInfo(s, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
+        addToBot(new SummonRevenantAction(magicNumber, Revenant::takeMove));
     }
 
     @Override

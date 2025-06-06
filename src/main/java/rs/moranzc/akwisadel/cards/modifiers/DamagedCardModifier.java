@@ -2,15 +2,18 @@ package rs.moranzc.akwisadel.cards.modifiers;
 
 import basemod.abstracts.AbstractCardModifier;
 import rs.moranzc.akwisadel.base.EWCardModifierBase;
+import rs.moranzc.akwisadel.localization.I18nManager;
 
 public class DamagedCardModifier extends EWCardModifierBase {
+    public static final String ID = MakeID(DamagedCardModifier.class.getSimpleName());
+    public static final I18nManager.LocaleTip TIP = I18nManager.GetTip("DamagedCardMod");
     
-    protected DamagedCardModifier(String id, boolean unique, boolean inherent, String tipTile, String tipDesc) {
-        super(id, unique, inherent, tipTile, tipDesc);
+    public DamagedCardModifier() {
+        super(ID, true, false, TIP.title, TIP.desc());
     }
 
     @Override
     public AbstractCardModifier makeCopy() {
-        return null;
+        return new DamagedCardModifier();
     }
 }
