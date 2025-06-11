@@ -17,7 +17,7 @@ public class SmokeGrenade extends EWCardBase {
 
     @Override
     public void onUse(AbstractPlayer s, AbstractCreature t) {
-        addToBot(new MakeTempCardInHandAction(cardsToPreview, magicNumber));
+        addToBot(new MakeTempCardInHandAction(cardsToPreview.makeCopy(), magicNumber));
     }
 
     @Override

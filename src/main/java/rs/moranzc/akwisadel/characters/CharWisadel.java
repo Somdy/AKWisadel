@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.spine.AnimationState;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.cards.red.Strike_Red;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -73,6 +74,17 @@ public class CharWisadel extends CustomPlayer {
             summons.add(r);
         }
         return summons;
+    }
+    
+    public int blockDamageByRevenant(DamageInfo info, int damage) {
+        if (revenants.isEmpty())
+            return damage;
+        Revenant r = revenants.get(0);
+        return r.damage(damage, info, this);
+    }
+    
+    public int countRevenants() {
+        return revenants.stream().filter(r -> !r.dead).mapToInt(r -> 1).sum();
     }
 
     @Override

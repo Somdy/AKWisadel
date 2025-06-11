@@ -100,7 +100,7 @@ public final class I18nManager {
                     case "Desc":
                         cs.desc = content;
                         break;
-                    case "upgradeDesc":
+                    case "UpgradeDesc":
                         cs.upgradeDesc = content;
                         break;
                     default:
