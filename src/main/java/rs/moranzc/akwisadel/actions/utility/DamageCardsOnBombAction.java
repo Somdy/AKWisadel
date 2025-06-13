@@ -13,6 +13,7 @@ import rs.moranzc.akwisadel.cards.BombCardMgr;
 import rs.moranzc.akwisadel.cards.modifiers.DamagedCardModifier;
 import rs.moranzc.akwisadel.cards.modifiers.SlotIntoBombCardModifier;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
+import rs.moranzc.akwisadel.utils.CardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +43,10 @@ public class DamageCardsOnBombAction extends AbstractGameAction {
             cardsToDamage.forEach(c -> {
                 CardModifierManager.removeModifiersById(c, SlotIntoBombCardModifier.ID, true);
                 // Parts and Damaged ones go to Exhaust pile and rest
-                if (c instanceof IPartCard || CardModifierManager.hasModifier(c, DamagedCardModifier.ID)) {
+                if (c instanceof IPartCard || CardUtils.IsDamaged(c)) {
                     p.hand.moveToExhaustPile(c);
                 } else {
-                    CardModifierManager.addModifier(c, new DamagedCardModifier());
+                    CardUtils.DamageCard(c);
                     p.hand.moveToDiscardPile(c);
                 }
             });

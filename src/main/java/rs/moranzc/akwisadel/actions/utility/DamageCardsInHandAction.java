@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import rs.moranzc.akwisadel.cards.modifiers.DamagedCardModifier;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
+import rs.moranzc.akwisadel.utils.CardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +36,10 @@ public class DamageCardsInHandAction extends AbstractGameAction {
         if (duration == startDuration) {
             cardsToDamage.forEach(c -> {
                 // Damaged ones go to Exhaust pile and rest
-                if (CardModifierManager.hasModifier(c, DamagedCardModifier.ID)) {
+                if (CardUtils.IsDamaged(c)) {
                     p.hand.moveToExhaustPile(c);
                 } else {
-                    CardModifierManager.addModifier(c, new DamagedCardModifier());
+                    CardUtils.DamageCard(c);
                 }
             });
             cardsToDamage.clear();

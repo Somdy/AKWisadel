@@ -40,5 +40,27 @@
     "BloodstainedHewer.Desc": "对所有敌人造成 !D! 点伤害。 NL 此牌 ${mod.id}:损毁 时，伤害变为 !M! 倍。",
     "BloodstainedHewer.UpgradeDesc": "保留 NL 对所有敌人造成 !D! 点伤害。 NL 此牌 ${mod.id}:损毁 时，伤害变为 !M! 倍。",
     "MarchOfTheDead.Name": "亡者行军",
-    "MarchOfTheDead.Desc": "对所有敌人造成 !D! 点伤害。未 消耗 和 消耗 的卡牌中每有一张 ${mod.id}:损毁 的牌，伤害+ !M! ."
+    "MarchOfTheDead.Desc": "对所有敌人造成 !D! 点伤害。未 消耗 和 消耗 的卡牌中每有一张 ${mod.id}:损毁 的牌，伤害+ !M! .",
+    "TemperedResolve.Name": "百炼成钢",
+    "TemperedResolve.Desc": "造成 !D! 点伤害。 NL ${mod.id}:损毁 时改为使这张牌额外造成 !M! 点伤害。",
+    "Scatterblast.Name": "天女散“花”",
+    "Scatterblast.Desc": "消耗 NL 对一名随机敌人造成 !D! 点伤害 !M! 次。",
+    "SoloExtraction.Name": "独影归途",
+    "SoloExtraction.Desc": "本回合若未打出过牌，此牌耗能为0. NL 造成 !D! 点伤害，给予 !M! 层 虚弱 。 NL 下回合开始时，获得 [E] .",
+    "AllThatBurnt.Name": "俱焚",
+    "AllThatBurnt.Desc": "本回合每 ${mod.id}:损毁 一张牌，就造成一次 !D! 点伤害。",
+    "AllThatBurnt.Extd": " NL (造成%d点伤害%d次)",
+    "LoneWolf.Name": "唯余一人",
+    "LoneWolf.Desc": "造成 !D! 点伤害。 NL 若此牌是手牌中唯一未 ${mod.id}:损毁 的牌，伤害变为 !M! 倍。",
+    "Salvage.Name": "翻找废料",//
+    "Salvage.Desc": "造成 !D! 7/10点伤害。 NL 抽 !M! 4/5张牌，丢弃抽到的牌中未 ${mod.id}:损毁 的牌。",
+    "ArmyOfOne.Name": "一人成军",
+    "ArmyOfOne.Desc": "对所有敌人造成 !D! 8点伤害。 NL 每造成一次伤害，召唤一个 ${mod.id}:魂灵之影 。",
+    "ArmyOfOne.UpgradeDesc": "对所有敌人造成 !D! 8点伤害。 NL 每造成一次伤害，召唤一个 ${mod.id}:魂灵之影 并立即触发之。",
+    "LayDying.Name": "人之将死",
+    "LayDying.Desc": "造成 !D! 4/6点伤害。 NL 被 消耗 时，获得 [E] [E] 并抽 !M! 2张牌。",
+    "ToothlessRage.Name": "无能之怒",
+    "ToothlessRage.Desc": "造成 !D! 4/6点伤害。 NL 你每次 ${mod.id}:损毁 其他牌时，若此牌未消耗，则将其放入你的手牌。",
+    "TunedBomb.Name": "精装炸弹",
+    "TunedBomb.Desc": "${mod.id}:插槽 !${mod.id}:slot! 1/2NL 造成 !D! 8/10点伤害。 NL 这张炸弹插槽所触发的所有增益翻倍。"
 }

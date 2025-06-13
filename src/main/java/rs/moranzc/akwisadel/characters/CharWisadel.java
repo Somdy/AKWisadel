@@ -50,6 +50,8 @@ public class CharWisadel extends CustomPlayer {
     public static final Color CARD_TRAIL_COL = new Color(136.0F / 255.0F, 39.0F / 255.0F, 39.0F / 255.0F, 1.0F);
     public static final int MAX_REVENANTS = 3;
     private final List<Revenant> revenants = new ArrayList<>();
+
+    public static final List<AbstractCard> CARDS_DAMAGED_THIS_TURN = new ArrayList<>();
     
     public CharWisadel() {
         super("Wisadel", EWEnums.CHAR_WISADEL, new EnergyOrbGreen(), new SpineAnimation(SK_ALT, SK_JSON, 1.8F));
@@ -110,6 +112,18 @@ public class CharWisadel extends CustomPlayer {
                 r.update();
             }
         }
+    }
+
+    @Override
+    public void applyStartOfTurnOrbs() {
+        super.applyStartOfTurnOrbs();
+        CARDS_DAMAGED_THIS_TURN.clear();
+    }
+
+    @Override
+    public void onVictory() {
+        super.onVictory();
+        CARDS_DAMAGED_THIS_TURN.clear();
     }
 
     @Override

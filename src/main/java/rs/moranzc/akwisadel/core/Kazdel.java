@@ -12,7 +12,9 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.Keyword;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
@@ -54,6 +56,11 @@ public class Kazdel implements EditStringsSubscriber, EditKeywordsSubscriber, Ed
     
     public static String MakeID(String s) {
         return MOD_ID.concat(":").concat(s);
+    }
+    
+    public static boolean OutOfCombat() {
+        return AbstractDungeon.getCurrMapNode() != null && AbstractDungeon.getCurrRoom() != null
+                && AbstractDungeon.getCurrRoom().phase != AbstractRoom.RoomPhase.COMBAT;
     }
 
     @Override
