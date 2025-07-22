@@ -14,7 +14,7 @@ public class DustAndSmoke extends EWCardBase implements IPartCard {
     public static final String ID = MakeID(DustAndSmoke.class.getSimpleName());
     
     public DustAndSmoke() {
-        super(ID, "ew/DustAndSmoke.png", 1, CardType.SKILL, CardRarity.SPECIAL, CardTarget.SELF);
+        super(ID, "ew/DustAndSmoke.png", 0, CardType.SKILL, CardRarity.SPECIAL, CardTarget.SELF);
         setBlock(2);
         setMagic(4);
     }

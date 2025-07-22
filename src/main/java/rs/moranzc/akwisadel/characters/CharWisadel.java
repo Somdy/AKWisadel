@@ -88,6 +88,22 @@ public class CharWisadel extends CustomPlayer {
     public int countRevenants() {
         return revenants.stream().filter(r -> !r.dead).mapToInt(r -> 1).sum();
     }
+    
+    public int countRevenantsTotalHP() {
+        return revenants.stream().filter(r -> !r.dead).mapToInt(r -> r.currHP).sum();
+    }
+    
+    public void modifyRevenantMoveTimes(int delta) {
+        revenants.forEach(r -> {
+            r.moveTimes += delta;
+            if (r.moveTimes < 0)
+                r.moveTimes = 0;
+        });
+    }
+    
+    public void letRevenantsTakeMove() {
+        revenants.forEach(Revenant::takeMove);
+    }
 
     @Override
     public void renderPlayerImage(SpriteBatch sb) {
@@ -121,9 +137,16 @@ public class CharWisadel extends CustomPlayer {
     }
 
     @Override
+    public void applyEndOfTurnTriggers() {
+        super.applyEndOfTurnTriggers();
+        letRevenantsTakeMove();
+    }
+
+    @Override
     public void onVictory() {
         super.onVictory();
         CARDS_DAMAGED_THIS_TURN.clear();
+        revenants.clear();
     }
 
     @Override

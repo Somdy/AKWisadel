@@ -14,7 +14,9 @@ import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import rs.moranzc.akwisadel.powers.GiftPower;
+import rs.moranzc.akwisadel.powers.OrderOfRevenantPower;
 
 public class Revenant {
     private static Texture REVENANT_TEX = ImageMaster.loadImage("AKWisadelAssets/images/char/Revenant.png");
@@ -27,11 +29,13 @@ public class Revenant {
     protected int maxHP;
     protected int currHP;
     protected boolean dead;
+    protected int moveTimes;
     
     public Revenant() {
         hb = new Hitbox(WIDTH * Settings.scale, HEIGHT * Settings.scale);
         maxHP = currHP = 7;
         damage = 2;
+        moveTimes = 1;
     }
     
     public void setPosition(float cX, float cY) {
@@ -43,11 +47,20 @@ public class Revenant {
             @Override
             public void update() {
                 isDone = true;
-                AbstractMonster m = AbstractDungeon.getMonsters().getRandomMonster(true);
-                if (m != null && !m.isDeadOrEscaped()) {
-                    addToTop(new ApplyPowerAction(m, AbstractDungeon.player, new GiftPower(m, 1)));
-                    addToTop(new DamageAction(m, new DamageInfo(AbstractDungeon.player, 2, DamageInfo.DamageType.THORNS), 
-                            AttackEffect.BLUNT_LIGHT));
+                if (AbstractDungeon.player instanceof CharWisadel) {
+                    AbstractPower p = AbstractDungeon.player.getPower(OrderOfRevenantPower.POWER_ID);
+                    if (p != null) {
+                        moveTimes += p.amount;
+                        p.flash();
+                    }
+                }
+                for (int i = 0; i < moveTimes; i++) {
+                    AbstractMonster m = AbstractDungeon.getMonsters().getRandomMonster(true);
+                    if (m != null && !m.isDeadOrEscaped()) {
+                        addToTop(new ApplyPowerAction(m, AbstractDungeon.player, new GiftPower(m, 1)));
+                        addToTop(new DamageAction(m, new DamageInfo(AbstractDungeon.player, 2, DamageInfo.DamageType.THORNS),
+                                AttackEffect.BLUNT_LIGHT));
+                    }
                 }
             }
         });

@@ -1,17 +1,13 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import rs.moranzc.akwisadel.actions.utility.DamageCardsInHandAction;
+import rs.moranzc.akwisadel.actions.common.DamageCardsAction;
 import rs.moranzc.akwisadel.base.EWCardBase;
-import rs.moranzc.akwisadel.powers.TargetedEliminationPower;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +42,7 @@ public class IndiscriminateBombing extends EWCardBase {
                         AbstractCard c = cards.get(AbstractDungeon.cardRandomRng.random(0, cards.size() - 1));
                         cards.remove(c);
                     }
-                    addToTop(new DamageCardsInHandAction(s, t, cards));
+                    addToTop(new DamageCardsAction(s, t, cards));
                 }
             }
         });

@@ -16,7 +16,7 @@ public class PerfectedBomb extends EWBombCardBase {
     public static final String ID = MakeID(PerfectedBomb.class.getSimpleName());
     
     public PerfectedBomb() {
-        super(ID, "ew/PerfectedBomb.png", 2, 2, CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY);
+        super(ID, "ew/PerfectedBomb.png", 2, 2, CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
         setDamage(6);
         setMagic(6);
     }

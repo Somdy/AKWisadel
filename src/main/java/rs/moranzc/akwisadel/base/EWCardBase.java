@@ -17,6 +17,11 @@ import java.util.Arrays;
 public abstract class EWCardBase extends CustomCard {
     
     protected final EWCardStrings strings;
+
+    public int baseExtraMagic;
+    public int extraMagic;
+    public boolean isExtraMagicModified;
+    public boolean upgradedExtraMagic;
     
     public EWCardBase(String id, String imgName, int cost, CardType type, CardRarity rarity, CardTarget target) {
         super(id, "undefined", GetPortrait(imgName, type), cost, "undefined", type, EWEnums.EW_COLOR, rarity, target);
@@ -42,6 +47,26 @@ public abstract class EWCardBase extends CustomCard {
     }
     
     protected abstract void onUse(AbstractPlayer s, AbstractCreature t);
+
+    protected void setExtraMagic(int extraMagics) {
+        baseExtraMagic = extraMagics;
+        extraMagic = baseExtraMagic;
+    }
+
+    protected void upgradeExtraMagic(int delta) {
+        baseExtraMagic += delta;
+        extraMagic = baseExtraMagic;
+        upgradedExtraMagic = true;
+    }
+
+    @Override
+    public void displayUpgrades() {
+        super.displayUpgrades();
+        if (upgradedExtraMagic) {
+            extraMagic = baseExtraMagic;
+            isExtraMagicModified = true;
+        }
+    }
 
     @Override
     public void upgrade() {

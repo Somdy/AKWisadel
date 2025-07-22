@@ -17,6 +17,7 @@ import java.util.List;
 public abstract class EWBombCardBase extends EWCardBase {
     
     public static final List<AbstractCard> CARDS_TO_DAMAGE_PREVIEW = new ArrayList<>();
+    private static AbstractCard lastCardPreviewed = null;
     
     public int baseSlot;
     public int slot;
@@ -32,10 +33,15 @@ public abstract class EWBombCardBase extends EWCardBase {
     @Override
     public void update() {
         super.update();
-        if (hb.hovered && cpr().hand.contains(this) && slot > 0) {
+        if (shouldShowBombPreview()) {
+            lastCardPreviewed = this;
             CARDS_TO_DAMAGE_PREVIEW.clear();
-            CARDS_TO_DAMAGE_PREVIEW.addAll(BombCardMgr.AutoCollectCardsForBomb(this, cpr()));
+            BombCardMgr.AutoCollectCardsForBomb(CARDS_TO_DAMAGE_PREVIEW, this, cpr());
         }
+    }
+    
+    protected boolean shouldShowBombPreview() {
+        return (hb.hovered || cpr().hoveredCard == this) && lastCardPreviewed != this && cpr().hand.contains(this) && slot > 0;
     }
 
     @Override
@@ -51,7 +57,16 @@ public abstract class EWBombCardBase extends EWCardBase {
         if (baseDamage < 0)
             baseDamage = 0;
     }
-    
+
+    @Override
+    public void displayUpgrades() {
+        super.displayUpgrades();
+        if (upgradedSlot) {
+            slot = baseSlot;
+            isSlotModified = true;
+        }
+    }
+
     protected void setSlots(int slots, float efficiency) {
         baseSlot = slots;
         slot = baseSlot;

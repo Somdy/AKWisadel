@@ -5,6 +5,8 @@ import basemod.BaseMod;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.colorless.Madness;
 import rs.moranzc.akwisadel.base.EWCardBase;
+import rs.moranzc.akwisadel.cards.dynvars.ExtraMagicVariable;
+import rs.moranzc.akwisadel.cards.dynvars.SlotVariable;
 import rs.moranzc.akwisadel.cards.wisadel.Strike_EW;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 
@@ -21,6 +23,8 @@ public final class CardMst {
                 .packageFilter(Strike_EW.class)
                 .any(EWCardBase.class, (i, c) -> addCard(c));
         Kazdel.logger.info("{} cards added!", card_map.values().size());
+        BaseMod.addDynamicVariable(new SlotVariable());
+        BaseMod.addDynamicVariable(new ExtraMagicVariable());
     }
     
     private static void addCard(EWCardBase card) {
@@ -30,11 +34,15 @@ public final class CardMst {
         BaseMod.addCard(card.makeCopy());
     }
     
-    public static AbstractCard GetRandomPart(Predicate<EWCardBase> filter) {
-        return parts.stream().parallel().filter(filter).findAny().map(c -> (AbstractCard) c).orElse(new Madness());
+    public static AbstractCard GetRandomPart(Predicate<EWCardBase> matcher) {
+        return parts.stream().parallel().filter(matcher).findAny().map(c -> (AbstractCard) c).orElse(new Madness());
     }
 
     public static AbstractCard GetRandomPart() {
         return GetRandomPart(c -> true);
+    }
+    
+    public static AbstractCard GetRandomCard(Predicate<EWCardBase> matcher) {
+        return card_map.values().stream().parallel().filter(matcher).findAny().map(c -> (AbstractCard) c).orElse(new Madness());
     }
 }

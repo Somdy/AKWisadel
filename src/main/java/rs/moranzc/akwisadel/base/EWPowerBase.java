@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public abstract class EWPowerBase extends AbstractPower {
     private static final Map<String, TextureAtlas.AtlasRegion> img48_map = new HashMap<>();
     private static final Map<String, TextureAtlas.AtlasRegion> img128_map = new HashMap<>();
-    
+    private static int idIndex = 0;
     private Supplier<String> descBuilder;
     protected PowerStrings powerStrings;
     protected String[] desc;
@@ -34,6 +34,15 @@ public abstract class EWPowerBase extends AbstractPower {
         name = powerStrings.NAME;
         desc = powerStrings.DESCRIPTIONS;
         loadImg(imgName);
+    }
+
+    protected void distinctID(String distinction) {
+        ID = ID.concat(distinction);
+    }
+
+    protected void distinctID() {
+        distinctID(Integer.toString(idIndex));
+        idIndex++;
     }
 
     protected void setValues(AbstractCreature owner, AbstractCreature source, int amount) {

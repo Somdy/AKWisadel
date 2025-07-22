@@ -13,13 +13,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DrawCardFromDiscardPileAction extends AbstractGameAction {
-    private final Predicate<AbstractCard> filter;
+    private final Predicate<AbstractCard> matcher;
     private final AbstractGameAction followingAction;
 
     public DrawCardFromDiscardPileAction(int amount, AbstractGameAction action, Predicate<AbstractCard> filter) {
         this.amount = amount;
         this.followingAction = action;
-        this.filter = filter;
+        matcher = filter;
         actionType = ActionType.CARD_MANIPULATION;
         duration = startDuration = Settings.ACTION_DUR_XFAST;
     }
@@ -36,9 +36,9 @@ public class DrawCardFromDiscardPileAction extends AbstractGameAction {
     public void update() {
         isDone = true;
         AbstractPlayer p = AbstractDungeon.player;
-        if (p.hasPower(NoDrawPower.POWER_ID) || p.discardPile.isEmpty() || p.discardPile.group.stream().noneMatch(filter) || amount <= 0)
+        if (p.hasPower(NoDrawPower.POWER_ID) || p.discardPile.isEmpty() || p.discardPile.group.stream().noneMatch(matcher) || amount <= 0)
             return;
-        List<AbstractCard> matched = p.discardPile.group.stream().filter(filter).collect(Collectors.toList());
+        List<AbstractCard> matched = p.discardPile.group.stream().filter(matcher).collect(Collectors.toList());
         while (matched.size() > amount) {
             matched.remove(matched.size() - 1);
         }

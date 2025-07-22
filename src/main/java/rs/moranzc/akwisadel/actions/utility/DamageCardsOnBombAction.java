@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.cards.BombCardMgr;
-import rs.moranzc.akwisadel.cards.modifiers.DamagedCardModifier;
 import rs.moranzc.akwisadel.cards.modifiers.SlotIntoBombCardModifier;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 import rs.moranzc.akwisadel.utils.CardUtils;

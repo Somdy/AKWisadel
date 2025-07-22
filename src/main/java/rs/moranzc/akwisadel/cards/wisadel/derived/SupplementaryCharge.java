@@ -18,7 +18,7 @@ public class SupplementaryCharge extends EWCardBase implements IPartCard {
     public static final String ID = MakeID(SupplementaryCharge.class.getSimpleName());
     
     public SupplementaryCharge() {
-        super(ID, "ew/SupplementaryCharge.png", 1, CardType.ATTACK, CardRarity.SPECIAL, CardTarget.ENEMY);
+        super(ID, "ew/SupplementaryCharge.png", 0, CardType.ATTACK, CardRarity.SPECIAL, CardTarget.ENEMY);
         setDamage(4);
         setMagic(4);
     }

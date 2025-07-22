@@ -1,6 +1,5 @@
-package rs.moranzc.akwisadel.actions.utility;
+package rs.moranzc.akwisadel.actions.common;
 
-import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -8,21 +7,29 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import rs.moranzc.akwisadel.cards.modifiers.DamagedCardModifier;
-import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-public class DamageCardsInHandAction extends AbstractGameAction {
+public class DamageCardsAction extends AbstractGameAction {
     private final AbstractPlayer p;
     private final List<AbstractCard> cardsToDamage;
     
-    public DamageCardsInHandAction(AbstractPlayer p, AbstractCreature t, List<AbstractCard> cardsToDamage) {
+    public DamageCardsAction(AbstractPlayer p, AbstractCreature t, List<AbstractCard> cardsToDamage) {
         this.p = p;
         setValues(t, p);
         this.cardsToDamage = new ArrayList<>(cardsToDamage);
+        actionType = ActionType.CARD_MANIPULATION;
+        duration = startDuration = Settings.ACTION_DUR_XFAST;
+    }
+
+    public DamageCardsAction(AbstractPlayer p, AbstractCreature t, AbstractCard... cardsToDamage) {
+        this.p = p;
+        setValues(t, p);
+        this.cardsToDamage = new ArrayList<>(Arrays.asList(cardsToDamage));
         actionType = ActionType.CARD_MANIPULATION;
         duration = startDuration = Settings.ACTION_DUR_XFAST;
     }
@@ -34,13 +41,14 @@ public class DamageCardsInHandAction extends AbstractGameAction {
             return;
         }
         if (duration == startDuration) {
-            cardsToDamage.forEach(c -> {
+            cardsToDamage.stream().filter(Objects::nonNull).forEach(c -> {
                 // Damaged ones go to Exhaust pile and rest
-                if (CardUtils.IsDamaged(c)) {
-                    p.hand.moveToExhaustPile(c);
-                } else {
-                    CardUtils.DamageCard(c);
-                }
+//                if (CardUtils.IsDamaged(c)) {
+//                    p.hand.moveToExhaustPile(c);
+//                } else {
+//                    CardUtils.DamageCard(c);
+//                }
+                CardUtils.DamageCard(c, p.hand);
             });
             cardsToDamage.clear();
             p.hand.applyPowers();
