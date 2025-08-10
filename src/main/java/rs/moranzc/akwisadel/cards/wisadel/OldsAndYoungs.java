@@ -18,7 +18,7 @@ public class OldsAndYoungs extends EWCardBase implements IPartCard {
     public static final String ID = MakeID(OldsAndYoungs.class.getSimpleName());
     
     public OldsAndYoungs() {
-        super(ID, "ew/OldsAndYoungs.png", 1, CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
+        super(ID, "ew/OldsAndYoungs.png", 0, CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
         setDamage(4);
         setMagic(4);
     }
@@ -31,13 +31,20 @@ public class OldsAndYoungs extends EWCardBase implements IPartCard {
     @Override
     protected void onUpgrade() {
         upgradeTexts();
-        upgradeDamage(2);
+        upgradeDamage(1);
         upgradeMagicNumber(2);
     }
 
     @Override
     public void onAppliedOnBomb(EWBombCardBase card, AbstractPlayer s, AbstractCreature t, float slotEfficiency) {
         addToBot(new IncreaseBombDamageAction(card, MathUtils.floor(magicNumber * slotEfficiency) ));
-        addToBot(new MakeTempCardInHandAction(this, MathUtils.floor(2 * slotEfficiency)));
+        addToBot(new MakeTempCardInHandAction(getEtherealCopy(), MathUtils.floor(2 * slotEfficiency)));
+    }
+    
+    private OldsAndYoungs getEtherealCopy() {
+        OldsAndYoungs o = new OldsAndYoungs();
+        o.rawDescription = o.strings.customs.get("Extd0");
+        o.initializeDescription();
+        return o;
     }
 }

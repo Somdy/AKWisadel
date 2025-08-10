@@ -2,13 +2,10 @@ package rs.moranzc.akwisadel.powers;
 
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import rs.moranzc.akwisadel.actions.common.DamageCardsAction;
-import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.base.EWPowerBase;
-import rs.moranzc.akwisadel.utils.DamageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +28,7 @@ public class DieOfDeathPower extends EWPowerBase {
         addToBot(new RemoveSpecificPowerAction(owner, owner, this));
         if (!cardsToDamage.isEmpty()) {
             flashWithoutSound();
-            addToBot(new DamageCardsAction(AbstractDungeon.player, owner, cardsToDamage));
+            addToBot(new DamageCardsAction(AbstractDungeon.player, cardsToDamage));
             cardsToDamage.clear();
         }
     }

@@ -18,7 +18,7 @@ public class GiftPower extends EWPowerBase {
     public GiftPower(AbstractCreature owner, int amount) {
         super(POWER_ID, "gift", PowerType.DEBUFF, owner);
         setValues(null, amount);
-        preloadString(() -> mkstring(desc[0], ((int) calculateDamageBoost()) * 100, calculateExplodingDamage(2.0F)));
+        preloadString(() -> mkstring(desc[0], calculateDamageBoost() * 100.0F, calculateExplodingDamage(2.0F)));
         updateDescription();
         ignited = false;
     }
@@ -26,7 +26,7 @@ public class GiftPower extends EWPowerBase {
     @Override
     public float atDamageGive(float damage, DamageInfo.DamageType type) {
         float damageBoost = calculateDamageBoost();
-        damage = damageBoost * (1.0F - damageBoost);
+        damage = damage * (1.0F - damageBoost);
         return super.atDamageGive(damage, type);
     }
 

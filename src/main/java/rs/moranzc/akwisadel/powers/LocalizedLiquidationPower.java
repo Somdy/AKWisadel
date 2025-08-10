@@ -8,11 +8,11 @@ import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.base.EWPowerBase;
 import rs.moranzc.akwisadel.utils.DamageUtils;
 
-public class TargetedEliminationPower extends EWPowerBase {
-    public static final String POWER_ID = MakeID(TargetedEliminationPower.class.getSimpleName());
+public class LocalizedLiquidationPower extends EWPowerBase {
+    public static final String POWER_ID = MakeID(LocalizedLiquidationPower.class.getSimpleName());
     
-    public TargetedEliminationPower(AbstractCreature owner, int amount) {
-        super(POWER_ID, "targeted_elimination", PowerType.DEBUFF, owner);
+    public LocalizedLiquidationPower(AbstractCreature owner, int amount) {
+        super(POWER_ID, "localized_liquidation", PowerType.DEBUFF, owner);
         setValues(null, amount);
         preloadString(() -> mkstring(desc[0], ((int) calculateDamageBoost()) * 100));
         updateDescription();

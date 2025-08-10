@@ -2,7 +2,6 @@ package rs.moranzc.akwisadel.cards.wisadel;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInDiscardAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -12,7 +11,6 @@ import rs.moranzc.akwisadel.actions.common.IncreaseBombDamageAction;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
-import rs.moranzc.akwisadel.powers.TargetedEliminationPower;
 
 public class FreshBlood extends EWCardBase implements IPartCard {
     public static final String ID = MakeID(FreshBlood.class.getSimpleName());

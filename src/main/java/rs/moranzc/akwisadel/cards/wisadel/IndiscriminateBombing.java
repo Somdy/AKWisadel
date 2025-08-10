@@ -42,7 +42,7 @@ public class IndiscriminateBombing extends EWCardBase {
                         AbstractCard c = cards.get(AbstractDungeon.cardRandomRng.random(0, cards.size() - 1));
                         cards.remove(c);
                     }
-                    addToTop(new DamageCardsAction(s, t, cards));
+                    addToTop(new DamageCardsAction(s, cards));
                 }
             }
         });

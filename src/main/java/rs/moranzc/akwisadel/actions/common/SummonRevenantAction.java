@@ -28,7 +28,7 @@ public class SummonRevenantAction extends AbstractGameAction {
         if (!(p instanceof CharWisadel) || amount <= 0)
             return;
         CharWisadel ew = ((CharWisadel) p);
-        List<Revenant> summoned = ew.summonRevenants(1);
+        List<Revenant> summoned = ew.summonRevenants(amount);
         summoned.forEach(r -> postAction.accept(r));
     }
 }

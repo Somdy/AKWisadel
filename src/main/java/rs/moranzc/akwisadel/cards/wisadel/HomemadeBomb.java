@@ -21,7 +21,7 @@ public class HomemadeBomb extends EWBombCardBase {
 
     @Override
     public void onUse(AbstractPlayer s, AbstractCreature t, List<AbstractCard> cardsToDamage) {
-        addToBot(new DamageAction(t, new DamageInfo(s, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
+        addToBot(new DamageAction(t, createBombInfo(s, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
     }
 
     @Override

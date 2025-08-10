@@ -90,6 +90,9 @@ public abstract class EWPowerBase extends AbstractPower {
             loadRegion(filename);
         } catch (Exception e) {
             loadImgFromSeparateFiles(filename);
+        } finally {
+            if (region128 == null || region48 == null)
+                loadImgFromSeparateFiles(filename);
         }
     }
     

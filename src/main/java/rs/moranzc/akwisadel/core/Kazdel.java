@@ -1,11 +1,9 @@
 package rs.moranzc.akwisadel.core;
 
+import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.helpers.CardBorderGlowManager;
-import basemod.interfaces.EditCardsSubscriber;
-import basemod.interfaces.EditKeywordsSubscriber;
-import basemod.interfaces.EditStringsSubscriber;
-import basemod.interfaces.PostInitializeSubscriber;
+import basemod.interfaces.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
@@ -13,24 +11,35 @@ import com.google.gson.Gson;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.localization.Keyword;
+import com.megacrit.cardcrawl.localization.PowerStrings;
+import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
+import rs.moranzc.akwisadel.base.EWRelicBase;
 import rs.moranzc.akwisadel.characters.CharWisadel;
 import rs.moranzc.akwisadel.localization.I18nManager;
 import rs.moranzc.akwisadel.patches.EWEnums;
+import rs.moranzc.akwisadel.relics.StarterRelicEW;
+import rs.moranzc.akwisadel.utils.TexMgr;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 @SpireInitializer
-public class Kazdel implements EditStringsSubscriber, EditKeywordsSubscriber, EditCardsSubscriber, PostInitializeSubscriber {
+public class Kazdel implements EditStringsSubscriber, EditKeywordsSubscriber, EditCardsSubscriber, PostInitializeSubscriber, 
+        EditCharactersSubscriber, OnCardUseSubscriber, EditRelicsSubscriber {
 
     public static final Logger logger = LogManager.getLogger(Kazdel.class.getName());
     
     public static final String MOD_ID = "akcew";
     public static final String CARD_PREFIX = MOD_ID.concat(".card");
+    public static final String RELIC_PREFIX = MOD_ID.concat(".relic");
+
+    public static final Color CARD_TRAIL_COL = new Color(136.0F / 255.0F, 39.0F / 255.0F, 39.0F / 255.0F, 1.0F);
     
     public static void initialize() {
         Kazdel k = new Kazdel();
@@ -39,7 +48,7 @@ public class Kazdel implements EditStringsSubscriber, EditKeywordsSubscriber, Ed
     }
 
     private static void registerColors() {
-        BaseMod.addColor(EWEnums.EW_COLOR, CharWisadel.CARD_TRAIL_COL.cpy(),
+        BaseMod.addColor(EWEnums.EW_COLOR, CARD_TRAIL_COL.cpy(),
                 cardui("bg_attack_512"), cardui("bg_skill_512"), cardui("bg_power_512"), 
                 cardui("card_orb_512"),
                 cardui("bg_attack_1024"), cardui("bg_skill_1024"), cardui("bg_power_1024"),
@@ -59,8 +68,8 @@ public class Kazdel implements EditStringsSubscriber, EditKeywordsSubscriber, Ed
     }
     
     public static boolean OutOfCombat() {
-        return AbstractDungeon.getCurrMapNode() != null && AbstractDungeon.getCurrRoom() != null
-                && AbstractDungeon.getCurrRoom().phase != AbstractRoom.RoomPhase.COMBAT;
+        return AbstractDungeon.getCurrMapNode() == null || AbstractDungeon.getCurrRoom() == null
+                || AbstractDungeon.getCurrRoom().phase != AbstractRoom.RoomPhase.COMBAT;
     }
 
     @Override
@@ -83,6 +92,9 @@ public class Kazdel implements EditStringsSubscriber, EditKeywordsSubscriber, Ed
     @Override
     public void receiveEditStrings() {
         I18nManager.Initialize();
+        BaseMod.loadCustomStringsFile(CharacterStrings.class, I18nManager.StringsPath("char.json"));
+        BaseMod.loadCustomStringsFile(PowerStrings.class, I18nManager.StringsPath("powers.json"));
+        BaseMod.loadCustomStringsFile(RelicStrings.class, I18nManager.StringsPath("relics.json"));
     }
 
     @Override
@@ -91,7 +103,7 @@ public class Kazdel implements EditStringsSubscriber, EditKeywordsSubscriber, Ed
         CardBorderGlowManager.addGlowInfo(new CardBorderGlowManager.GlowInfo() {
             @Override
             public boolean test(AbstractCard card) {
-                return EWBombCardBase.CARDS_TO_DAMAGE_PREVIEW.contains(card);
+                return EWBombCardBase.CARDS_TO_DAMAGE_PREVIEW_MAP.values().stream().anyMatch(l -> l.contains(card));
             }
 
             @Override
@@ -108,6 +120,23 @@ public class Kazdel implements EditStringsSubscriber, EditKeywordsSubscriber, Ed
 
     @Override
     public void receivePostInitialize() {
-        
+        TexMgr.Initialize();
+    }
+
+    @Override
+    public void receiveEditCharacters() {
+        BaseMod.addCharacter(new CharWisadel(), "AKWisadelAssets/images/char/Character_Button.png",
+                "AKWisadelAssets/images/char/Character_Portrait.png");
+    }
+
+    @Override
+    public void receiveCardUsed(AbstractCard card) {
+        EWBombCardBase.CARDS_TO_DAMAGE_PREVIEW_MAP.getOrDefault(card, new ArrayList<>()).clear();
+    }
+
+    @Override
+    public void receiveEditRelics() {
+        new AutoAdd(MOD_ID).packageFilter(StarterRelicEW.class)
+                .any(EWRelicBase.class, (i, r) -> BaseMod.addRelicToCustomPool(r, EWEnums.EW_COLOR));
     }
 }

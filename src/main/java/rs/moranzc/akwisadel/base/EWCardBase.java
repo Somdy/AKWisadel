@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import org.apache.logging.log4j.util.Strings;
 import rs.moranzc.akwisadel.core.Kazdel;
+import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 import rs.moranzc.akwisadel.localization.EWCardStrings;
 import rs.moranzc.akwisadel.localization.I18nManager;
 import rs.moranzc.akwisadel.patches.EWEnums;
@@ -27,6 +28,9 @@ public abstract class EWCardBase extends CustomCard {
         super(id, "undefined", GetPortrait(imgName, type), cost, "undefined", type, EWEnums.EW_COLOR, rarity, target);
         strings = I18nManager.GetCardStrings(id);
         initDefaultStrings();
+        if (this instanceof IPartCard) {
+            selfRetain = true;
+        }
     }
     
     protected void initDefaultStrings() {

@@ -3,16 +3,13 @@ package rs.moranzc.akwisadel.localization;
 import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.core.Kazdel;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public final class I18nManager {
-    private static final Map<String, LocaleTip> misc_tip_map = new HashMap<>();
     private static final Map<String, String> misc_text_map = new HashMap<>();
     private static final Map<String, EWCardStrings> card_map = new HashMap<>();
     
@@ -28,11 +25,6 @@ public final class I18nManager {
             // load misc strings
             json = loadJson(StringsPath("misc.json"));
             Map<String, String> rawMap = gson.fromJson(json, new TypeToken<Map<String, String>>(){}.getType());
-            Map<String, String> rawTips = rawMap.entrySet().stream()
-                    .filter(e -> "tip".equals(e.getKey().split("\\.")[0]))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            JsonProcessor.ProcessTip(rawTips, misc_tip_map);
-            rawTips.forEach((k,v) -> rawMap.remove(k));
             misc_text_map.putAll(rawMap);
         }
     }
@@ -48,11 +40,7 @@ public final class I18nManager {
     }
     
     public static EWCardStrings GetCardStrings(String cardID) {
-        return card_map.merge(cardID, new EWCardStrings(cardID), (ov,nv) -> ov);
-    }
-    
-    public static LocaleTip GetTip(String key) {
-        return misc_tip_map.get(key);
+        return card_map.merge(cardID, new EWCardStrings(cardID, true), (ov, nv) -> ov);
     }
     
     public static String MT(String key, Object... args) {
@@ -90,8 +78,8 @@ public final class I18nManager {
                     rawCardID = rawCardID.substring(1);
                     //TODO: remap the id
                 }
-                String cardID = EWCardBase.MakeID(rawCardID);
-                EWCardStrings cs = cardMap.merge(cardID, new EWCardStrings(cardID), (ov,nv) -> ov);
+                String cardID = Kazdel.CARD_PREFIX.concat(":").concat(rawCardID);
+                EWCardStrings cs = cardMap.merge(cardID, new EWCardStrings(cardID, false), (ov, nv) -> ov);
                 String fieldKey = c[1];
                 switch (fieldKey) {
                     case "Name":
@@ -107,41 +95,6 @@ public final class I18nManager {
                         cs.customs.put(fieldKey, content);
                 }
             }
-        }
-        
-        public static void ProcessTip(Map<String, String> rawMap, Map<String, LocaleTip> tipMap) {
-            if (rawMap == null || rawMap.isEmpty() || tipMap == null)
-                return;
-            Set<String> keys = rawMap.keySet();
-            for (String k : keys) {
-                // [ key, component ]
-                String[] args = k.split("\\.");
-                String tipKey = args[0];
-                String componentKey = args[1].toLowerCase();
-                String content = rawMap.get(k);
-                LocaleTip t = new LocaleTip(tipKey);
-                tipMap.merge(tipKey, t, (ov, nv) -> {
-                    ov.components.put(componentKey, content);
-                    return ov;
-                });
-            }
-        }
-    }
-    
-    public static final class LocaleTip {
-        public final String title;
-        final Map<String, String> components = new HashMap<>();
-
-        private LocaleTip(String title) {
-            this.title = title;
-        }
-        
-        public String get(String componentKey) {
-            return components.get(componentKey);
-        }
-        
-        public String desc() {
-            return get("desc");
         }
     }
 }

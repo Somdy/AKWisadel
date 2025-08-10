@@ -8,22 +8,28 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import rs.moranzc.akwisadel.actions.common.SummonRevenantAction;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
+import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.characters.Revenant;
 
 import java.util.List;
 
-public class FirstRevenant extends EWBombCardBase {
+public class FirstRevenant extends EWCardBase {
     public static final String ID = MakeID(FirstRevenant.class.getSimpleName());
     
     public FirstRevenant() {
-        super(ID, "ew/FirstRevenant.png", 1, 2, CardType.SKILL, CardRarity.BASIC, CardTarget.NONE);
+        super(ID, "ew/FirstRevenant.png", 2, CardType.SKILL, CardRarity.BASIC, CardTarget.NONE);
         setMagic(2);
+        exhaust = true;
     }
 
     @Override
-    public void onUse(AbstractPlayer s, AbstractCreature t, List<AbstractCard> cardsToDamage) {
+    protected void onUse(AbstractPlayer s, AbstractCreature t) {
         addToBot(new DamageAction(t, new DamageInfo(s, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
-        addToBot(new SummonRevenantAction(magicNumber, Revenant::takeMove));
+        addToBot(new SummonRevenantAction(1, r -> {
+            for (int i = 0; i < magicNumber; i++) {
+                r.takeMove();
+            }
+        }));
     }
 
     @Override

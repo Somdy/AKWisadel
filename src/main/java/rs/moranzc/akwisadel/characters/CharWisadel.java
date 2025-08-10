@@ -6,12 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.spine.AnimationState;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.cards.red.Strike_Red;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.EnergyManager;
@@ -20,41 +18,61 @@ import com.megacrit.cardcrawl.events.city.Vampires;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.localization.CharacterStrings;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.CharonsAshes;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
-import com.megacrit.cardcrawl.ui.panels.energyorb.EnergyOrbGreen;
-import rs.moranzc.akwisadel.cards.wisadel.TargetedElimination;
+import rs.moranzc.akwisadel.cards.wisadel.*;
 import rs.moranzc.akwisadel.core.Kazdel;
 import rs.moranzc.akwisadel.patches.EWEnums;
+import rs.moranzc.akwisadel.powers.ExplosiveDawnPower;
+import rs.moranzc.akwisadel.relics.StarterRelicEW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
+
+import static rs.moranzc.akwisadel.core.Kazdel.*;
 
 public class CharWisadel extends CustomPlayer {
     public static final String ID = Kazdel.MakeID("CharWisadel");
     private static final CharacterStrings strings = CardCrawlGame.languagePack.getCharacterString(ID);
     public static final String[] NAMES = strings.NAMES;
     public static final String[] TEXT = strings.TEXT;
-    public static final String Shoulder_1 = "AKWisadelAssets/images/char/shoulder1.png";
-    public static final String Shoulder_2 = "AKWisadelAssets/images/char/shoulder2.png";
+    public static final String Shoulder_1 = "AKWisadelAssets/images/char/shoulder2.png";
+    public static final String Shoulder_2 = "AKWisadelAssets/images/char/shoulder1.png";
     public static final String corpse = "AKWisadelAssets/images/char/corpse.png";
-    public static final String SK_ALT = "AKWisadelAssets/images/char/char_1035_wisdel.atlas";
-    public static final String SK_JSON = "AKWisadelAssets/images/char/char_1035_wisdel.json";
+    public static final String SK_ALT = "AKWisadelAssets/images/char/skins/nova/char_1035_wisdel.atlas";
+    public static final String SK_JSON = "AKWisadelAssets/images/char/skins/nova/char_1035_wisdel.json";
+    private static final String[] ORB_TEXTURES = new String[]{
+            "AKWisadelAssets/images/topPanel/energyOrb/layer5.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer4.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer3.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer2.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer1.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer6.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer5d.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer4d.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer3d.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer2d.png",
+            "AKWisadelAssets/images/topPanel/energyOrb/layer1d.png"
+    };
+    // 每个图层的旋转速度
+    private static final float[] LAYER_SPEED = new float[]{-40.0F, -32.0F, 20.0F, -20.0F, 0.0F, -10.0F, -8.0F, 5.0F, -5.0F, 0.0F};
     public static final int STARTING_HP = 79;
     public static final int MAX_HP = 79;
     public static final int ASCENSION_MAX_HP_LOSS = 9;
     public static final int STARTING_GOLD = 99;
     public static final int ORB_SLOTS = 0;
     public static final int DRAW_PER_TURN = 5;
-    public static final Color CARD_TRAIL_COL = new Color(136.0F / 255.0F, 39.0F / 255.0F, 39.0F / 255.0F, 1.0F);
     public static final int MAX_REVENANTS = 3;
     private final List<Revenant> revenants = new ArrayList<>();
 
     public static final List<AbstractCard> CARDS_DAMAGED_THIS_TURN = new ArrayList<>();
     
     public CharWisadel() {
-        super("Wisadel", EWEnums.CHAR_WISADEL, new EnergyOrbGreen(), new SpineAnimation(SK_ALT, SK_JSON, 1.8F));
+        super("Wisadel", EWEnums.CHAR_WISADEL, ORB_TEXTURES, "AKWisadelAssets/images/topPanel/energyOrb/vfx.png", LAYER_SPEED, 
+                new SpineAnimation(SK_ALT, SK_JSON, 1.8F));
         initializeClass(null, Shoulder_2, Shoulder_1, corpse, getLoadout(), 0.0F, 0.0F,
                 200.0F, 220.0F, new EnergyManager(3));
         stateData.setMix("Idle", "Die", 0.1F);
@@ -68,9 +86,8 @@ public class CharWisadel extends CustomPlayer {
     public List<Revenant> summonRevenants(int amount) {
         if (amount <= 0 || revenants.size() >= MAX_REVENANTS)
             return new ArrayList<>();
-        amount = amount > revenants.size() ? revenants.size() - amount : amount;
         List<Revenant> summons = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount && revenants.size() < MAX_REVENANTS; i++) {
             Revenant r = new Revenant();
             revenants.add(r);
             summons.add(r);
@@ -104,6 +121,10 @@ public class CharWisadel extends CustomPlayer {
     public void letRevenantsTakeMove() {
         revenants.forEach(Revenant::takeMove);
     }
+    
+    public void forEachLiveRevenant(Consumer<Revenant> action) {
+        revenants.stream().filter(r -> !r.dead).forEach(action);
+    }
 
     @Override
     public void renderPlayerImage(SpriteBatch sb) {
@@ -121,10 +142,13 @@ public class CharWisadel extends CustomPlayer {
         for (int i = 0; i < revenants.size(); i++) {
             Revenant r = revenants.get(i);
             if (r != null) {
-                Vector2 pos = new Vector2(drawX + hb.width / 4.0F + Revenant.WIDTH / 2.0F, 0);
-                // Based on a max of 3
-                pos.setAngle(90.0F - 120.0F * i);
-                r.setPosition(pos.x, pos.y);
+                float initialOffset = 25.0F;
+                float maxAngle = 270.0F;
+                float angle = i * (maxAngle / 3) + initialOffset;
+                float dist = 240.0F * Settings.scale;
+                float cX = dist * MathUtils.cosDeg(angle) + hb.cX + hb.width * 0.25F;
+                float cY = dist * MathUtils.sinDeg(angle) + hb.cY;
+                r.setPosition(cX, cY);
                 r.update();
             }
         }
@@ -150,18 +174,43 @@ public class CharWisadel extends CustomPlayer {
     }
 
     @Override
+    public void useCard(AbstractCard c, AbstractMonster monster, int energyOnUse) {
+        if (c.type == AbstractCard.CardType.ATTACK) {
+            if (hasPower(ExplosiveDawnPower.POWER_ID)) {
+                state.setAnimation(0, "Skill_3_Loop", false);
+                state.addAnimation(0, "Skill_3_Idle", true, 0.0F);
+            } else if (c instanceof LocalizedLiquidation) {
+                state.setAnimation(0, "Skill_1", false);
+            } else {
+                int randomAttack = MathUtils.random(0, 2);
+                if (randomAttack == 0) {
+                    state.setAnimation(0, "Attack_A", false);
+                } else if (randomAttack == 1) {
+                    state.setAnimation(0, "Attack_B", false);
+                } else {
+                    state.setAnimation(0, "Attack_C", false);
+                }
+                state.addAnimation(0, "Idle", true, 0.0F);
+            }
+        }
+        super.useCard(c, monster, energyOnUse);
+    }
+
+    @Override
     public ArrayList<String> getStartingDeck() {
-        return new ArrayList<>(Arrays.asList(Strike_Red.ID));
+        return new ArrayList<>(Arrays.asList(Strike_EW.ID, Strike_EW.ID, Strike_EW.ID, Strike_EW.ID, 
+                Defend_EW.ID, Defend_EW.ID, Defend_EW.ID, Defend_EW.ID,
+                HomemadeBomb.ID, SmokeGrenade.ID, FirstRevenant.ID));
     }
 
     @Override
     public ArrayList<String> getStartingRelics() {
-        return new ArrayList<>(Arrays.asList(CharonsAshes.ID));
+        return new ArrayList<>(Arrays.asList(StarterRelicEW.ID));
     }
 
     @Override
     public CharSelectInfo getLoadout() {
-        return new CharSelectInfo(NAMES[1], TEXT[1], STARTING_HP, MAX_HP, ORB_SLOTS, STARTING_GOLD, DRAW_PER_TURN, 
+        return new CharSelectInfo(NAMES[0], TEXT[1], STARTING_HP, MAX_HP, ORB_SLOTS, STARTING_GOLD, DRAW_PER_TURN, 
                 this, getStartingRelics(), getStartingDeck(), false);
     }
 
@@ -182,7 +231,7 @@ public class CharWisadel extends CustomPlayer {
 
     @Override
     public AbstractCard getStartCardForEvent() {
-        return new TargetedElimination();
+        return new LocalizedLiquidation();
     }
 
     @Override

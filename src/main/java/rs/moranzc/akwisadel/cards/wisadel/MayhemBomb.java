@@ -21,7 +21,7 @@ public class MayhemBomb extends EWBombCardBase {
 
     @Override
     public void onUse(AbstractPlayer s, AbstractCreature t, List<AbstractCard> cardsToDamage) {
-        addToBot(new DamageAction(t, new DamageInfo(s, damage * cardsToDamage.size(), damageTypeForTurn), 
+        addToBot(new DamageAction(t, createBombInfo(s, damage * cardsToDamage.size(), damageTypeForTurn), 
                 AbstractGameAction.AttackEffect.BLUNT_HEAVY));
     }
 

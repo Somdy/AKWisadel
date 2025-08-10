@@ -18,7 +18,7 @@ public class BombsAndSmoke extends EWCardBase {
     @Override
     protected void onUse(AbstractPlayer s, AbstractCreature t) {
         addToBot(new MakeTempCardInHandAction(new MicroBomb(), 1));
-        addToBot(new MakeTempCardInHandAction(new DustAndSmoke(), 2));
+        addToBot(new MakeTempCardInHandAction(new DustAndSmoke(), magicNumber));
     }
 
     @Override

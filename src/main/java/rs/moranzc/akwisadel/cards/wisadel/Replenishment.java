@@ -1,21 +1,15 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
-import basemod.abstracts.AbstractCardModifier;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.common.ExhaustSpecificCardAction;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
-import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import rs.moranzc.akwisadel.base.EWCardBase;
-import rs.moranzc.akwisadel.cards.modifiers.DamagedCardModifier;
-import rs.moranzc.akwisadel.core.CardMst;
-import rs.moranzc.akwisadel.interfaces.cards.ICallOnModifierAppliedCard;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
-public class Replenishment extends EWCardBase implements ICallOnModifierAppliedCard {
+public class Replenishment extends EWCardBase {
     public static final String ID = MakeID(Replenishment.class.getSimpleName());
     
     public Replenishment() {
@@ -45,18 +39,5 @@ public class Replenishment extends EWCardBase implements ICallOnModifierAppliedC
         upgradeTexts();
         upgradeMagicNumber(1);
         selfRetain = true;
-    }
-
-    @Override
-    public void onModifierApplied(AbstractCardModifier mod) {
-        if (DamagedCardModifier.ID.equals(mod.identifier(this))) {
-            addToTop(new AbstractGameAction() {
-                @Override
-                public void update() {
-                    CardUtils.MendCard(Replenishment.this);
-                    addToTop(new MakeTempCardInHandAction(CardMst.GetRandomPart(), 1));
-                }
-            });
-        }
     }
 }

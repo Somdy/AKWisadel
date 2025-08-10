@@ -46,10 +46,11 @@ public class DamageCardsOnBombAction extends AbstractGameAction {
                     p.hand.moveToExhaustPile(c);
                 } else {
                     CardUtils.DamageCard(c);
-                    p.hand.moveToDiscardPile(c);
+//                    p.hand.moveToDiscardPile(c);
                 }
             });
             BombCardMgr.LogMetric(bomb, cardsToDamage);
+            bomb.lastCardsToDamage.addAll(cardsToDamage);
             cardsToDamage.clear();
             p.hand.applyPowers();
             CardCrawlGame.dungeon.checkForPactAchievement();

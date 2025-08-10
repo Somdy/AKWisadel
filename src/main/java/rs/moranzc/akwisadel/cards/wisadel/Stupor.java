@@ -16,7 +16,6 @@ public class Stupor extends EWCardBase implements IPartCard {
         super(ID, "ew/Stupor.png", 1, CardType.SKILL, CardRarity.COMMON, CardTarget.SELF);
         setMagic(2);
         setExtraMagic(2);
-        cardsToPreview = new MicroBomb();
     }
 
     @Override

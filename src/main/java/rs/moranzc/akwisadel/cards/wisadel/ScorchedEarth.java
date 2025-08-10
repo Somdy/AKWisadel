@@ -1,12 +1,10 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.powers.StrengthPower;
 import rs.moranzc.akwisadel.actions.common.DamageCardsAction;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.base.EWCardBase;
@@ -37,7 +35,7 @@ public class ScorchedEarth extends EWCardBase {
                 if (!cards.isEmpty()) {
                     int blocks = cards.size() * block;
                     addToTop(new GainBlockAction(s, blocks));
-                    addToTop(new DamageCardsAction(s, s, cards));
+                    addToTop(new DamageCardsAction(s, cards));
                 }
             }
         });

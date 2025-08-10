@@ -18,7 +18,9 @@ public class EWCardStrings {
         this.customs.putAll(customs);
     }
     
-    EWCardStrings(String id) {
-        this(id, String.format("Missing Name for %s", id), String.format("Missing desc for %s", id), String.format("Missing upgrade desc for %s", id), new HashMap<>());
+    EWCardStrings(String id, boolean missingTip) {
+        this(id, missingTip ? String.format("Missing Name for %s", id) : "", 
+                missingTip ? String.format("Missing desc for %s", id) : "", 
+                missingTip ? String.format("Missing upgrade desc for %s", id) : "", new HashMap<>());
     }
 }

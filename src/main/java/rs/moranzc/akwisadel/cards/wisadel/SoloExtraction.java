@@ -17,7 +17,7 @@ public class SoloExtraction extends EWCardBase {
     public static final String ID = MakeID(SoloExtraction.class.getSimpleName());
     
     public SoloExtraction() {
-        super(ID, "ew/SoloExtraction.png", 1, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
+        super(ID, "ew/SoloExtraction.png", 1, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY);
         setDamage(6);
         setMagic(1);
     }

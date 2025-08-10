@@ -1,11 +1,19 @@
 package rs.moranzc.akwisadel.cards;
 
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import rs.moranzc.akwisadel.actions.utility.DamageCardsOnBombAction;
+import rs.moranzc.akwisadel.actions.utility.HandCardSelectActionBuilder;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.core.Kazdel;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
+import rs.moranzc.akwisadel.localization.I18nManager;
+import rs.moranzc.akwisadel.powers.AdvancedExtendedPower;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
 import java.util.ArrayList;
@@ -21,13 +29,35 @@ public class BombCardMgr {
         if (p.hand.isEmpty() || bomb.slot <= 0)
             return new ArrayList<>();
         boolean manually = false;
+        AbstractPower po = p.getPower(AdvancedExtendedPower.POWER_ID);
+        if (po instanceof AdvancedExtendedPower) {
+            manually = po.amount > 0;
+        }
         if (manually) {
-            //TODO: Select manually
+            AbstractDungeon.actionManager.addToBottom(new HandCardSelectActionBuilder(bomb.slot, I18nManager.MT("DamageCardAction"))
+                    .anyNumber(true).canPickZero(false).postSelected(cards -> {
+                        // execute the bomb and rearrange the actions so UseCardAction would be the latest one
+                        AbstractDungeon.actionManager.addToTop(new AbstractGameAction() {
+                            @Override
+                            public void update() {
+                                isDone = true;
+                                applySlotsOnBomb(bomb, p, t, cards);
+                                bomb.lastCardsToDamage.clear();
+                                bomb.onUse(p, t, cards);
+                                addToBot(new DamageCardsOnBombAction(bomb, p, t, cards));
+                                List<AbstractGameAction> uca = new ArrayList<>();
+                                AbstractDungeon.actionManager.actions.stream().filter(a -> a instanceof UseCardAction).forEach(uca::add);
+                                AbstractDungeon.actionManager.actions.removeAll(uca);
+                                AbstractDungeon.actionManager.actions.addAll(uca);
+                            }
+                        });
+                    }));
             return new ArrayList<>();
         } else {
             List<AbstractCard> cardsToDamage = new ArrayList<>();
             AutoCollectCardsForBomb(cardsToDamage, bomb, p);
             applySlotsOnBomb(bomb, p, t, cardsToDamage);
+            bomb.lastCardsToDamage.clear();
             bomb.onUse(p, t, cardsToDamage);
             return cardsToDamage;
         }
@@ -52,6 +82,7 @@ public class BombCardMgr {
             return;
         }
         List<AbstractCard> tempHand = new ArrayList<>(p.hand.group);
+        tempHand.remove(bomb);
         if (tempHand.size() <= bomb.slot) {
             cardsToDamage.addAll(tempHand);
         } else {

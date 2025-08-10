@@ -15,7 +15,7 @@ public class Plugging extends EWCardBase {
 
     @Override
     protected void onUse(AbstractPlayer s, AbstractCreature t) {
-        addToBot(new PlayTopCardsCallbackAction(1, false).callback(c -> addToTop(new DamageCardsAction(s, t, c))));
+        addToBot(new PlayTopCardsCallbackAction(1, false).callback(c -> addToTop(new DamageCardsAction(s, c))));
     }
 
     @Override

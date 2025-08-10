@@ -2,8 +2,12 @@ package rs.moranzc.akwisadel.core;
 
 import basemod.AutoAdd;
 import basemod.BaseMod;
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.colorless.Madness;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.random.Random;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.cards.dynvars.ExtraMagicVariable;
 import rs.moranzc.akwisadel.cards.dynvars.SlotVariable;
@@ -12,6 +16,7 @@ import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public final class CardMst {
     
@@ -31,18 +36,35 @@ public final class CardMst {
         card_map.put(card.cardID, card);
         if (card instanceof IPartCard)
             parts.add(card);
+        UnlockTracker.unlockCard(card.cardID);
         BaseMod.addCard(card.makeCopy());
     }
     
-    public static AbstractCard GetRandomPart(Predicate<EWCardBase> matcher) {
-        return parts.stream().parallel().filter(matcher).findAny().map(c -> (AbstractCard) c).orElse(new Madness());
+    public static AbstractCard GetRandomPart(Predicate<EWCardBase> matcher, Random rng) {
+        List<AbstractCard> cards = parts.stream().filter(matcher).collect(Collectors.toList());
+        if (cards.isEmpty())
+            return new Madness();
+        if (rng != null) {
+            return cards.get(rng.random(cards.size() - 1)).makeCopy();
+        }
+        return cards.get(MathUtils.random(cards.size() - 1)).makeCopy();
     }
 
     public static AbstractCard GetRandomPart() {
-        return GetRandomPart(c -> true);
+        return GetRandomPart(c -> true, AbstractDungeon.cardRandomRng);
+    }
+    
+    public static AbstractCard GetRandomCard(Predicate<EWCardBase> matcher, Random rng) {
+        List<AbstractCard> cards = card_map.values().stream().filter(matcher).collect(Collectors.toList());
+        if (cards.isEmpty())
+            return new Madness();
+        if (rng != null) {
+            return cards.get(rng.random(cards.size() - 1)).makeCopy();
+        }
+        return cards.get(MathUtils.random(cards.size() - 1)).makeCopy();
     }
     
     public static AbstractCard GetRandomCard(Predicate<EWCardBase> matcher) {
-        return card_map.values().stream().parallel().filter(matcher).findAny().map(c -> (AbstractCard) c).orElse(new Madness());
+        return GetRandomCard(matcher, AbstractDungeon.cardRandomRng);
     }
 }

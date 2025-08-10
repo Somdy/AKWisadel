@@ -5,10 +5,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import rs.moranzc.akwisadel.actions.common.DamageCardsAction;
-import rs.moranzc.akwisadel.actions.utility.GridCardSelectActionBuilder;
 import rs.moranzc.akwisadel.base.EWCardBase;
-import rs.moranzc.akwisadel.powers.DieOfDeathPower;
-import rs.moranzc.akwisadel.utils.CardUtils;
 
 import java.util.stream.Collectors;
 
@@ -24,7 +21,7 @@ public class MartialZealotry extends EWCardBase {
     @Override
     protected void onUse(AbstractPlayer s, AbstractCreature t) {
         addToBot(new ApplyPowerAction(s, s, new StrengthPower(s, magicNumber)));
-        addToBot(new DamageCardsAction(s, s, s.hand.group.stream().filter(c -> c.type != CardType.ATTACK).collect(Collectors.toList())));
+        addToBot(new DamageCardsAction(s, s.hand.group.stream().filter(c -> c.type != CardType.ATTACK).collect(Collectors.toList())));
     }
 
     @Override

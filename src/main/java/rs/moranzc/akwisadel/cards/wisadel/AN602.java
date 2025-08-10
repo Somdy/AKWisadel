@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import rs.moranzc.akwisadel.actions.unique.BombDamageAllEnemiesAction;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 
 import java.util.List;
@@ -26,9 +27,9 @@ public class AN602 extends EWBombCardBase {
     @Override
     public void onUse(AbstractPlayer s, AbstractCreature t, List<AbstractCard> cardsToDamage) {
         if (bombThemAll) {
-            addToBot(new DamageAllEnemiesAction(s, multiDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.BLUNT_HEAVY));
+            addToBot(new BombDamageAllEnemiesAction(this, s, multiDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.BLUNT_HEAVY));
         } else {
-            addToBot(new DamageAction(t, new DamageInfo(s, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_HEAVY));
+            addToBot(new DamageAction(t, createBombInfo(s, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_HEAVY));
         }
     }
 

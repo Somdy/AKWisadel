@@ -21,7 +21,7 @@ public class FurnacePower extends EWPowerBase {
     @Override
     public void onUseCard(AbstractCard card, UseCardAction action) {
         flashWithoutSound();
-        addToBot(new DamageCardsAction(AbstractDungeon.player, owner, card));
+        addToBot(new DamageCardsAction(AbstractDungeon.player, card));
     }
 
     @Override

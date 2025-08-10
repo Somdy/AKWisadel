@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.actions.common.ExhaustSpecificCardAction;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import rs.moranzc.akwisadel.actions.common.DrawMatchingCardsAction;
 import rs.moranzc.akwisadel.actions.common.IncreaseBombDamageAction;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.base.EWCardBase;
@@ -25,18 +26,7 @@ public class LordOfBombing extends EWCardBase implements IPartCard {
 
     @Override
     protected void onUse(AbstractPlayer s, AbstractCreature t) {
-        addToBot(new AbstractGameAction() {
-            @Override
-            public void update() {
-                isDone = true;
-                s.hand.group.stream().filter(CardUtils::IsPart)
-                        .forEach(c -> {
-                            addToTop(new GainEnergyAction(1));
-                            addToTop(new DrawCardAction(s, 1));
-                            addToTop(new ExhaustSpecificCardAction(c, s.hand));
-                        });
-            }
-        });
+        addToBot(new DrawMatchingCardsAction(magicNumber, c -> c instanceof EWBombCardBase));
     }
 
     @Override

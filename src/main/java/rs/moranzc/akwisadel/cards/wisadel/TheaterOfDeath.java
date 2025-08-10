@@ -2,6 +2,7 @@ package rs.moranzc.akwisadel.cards.wisadel;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -9,6 +10,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.DrawCardNextTurnPower;
 import com.megacrit.cardcrawl.vfx.combat.ClashEffect;
 import rs.moranzc.akwisadel.base.EWCardBase;
 
@@ -35,7 +37,7 @@ public class TheaterOfDeath extends EWCardBase {
                 isDone = true;
                 if (AbstractDungeon.actionManager.cardsPlayedThisTurn.stream()
                         .anyMatch(c -> c.type == CardType.ATTACK && c != TheaterOfDeath.this)) {
-                    addToTop(new DrawCardAction(magicNumber));
+                    addToTop(new ApplyPowerAction(s, s, new DrawCardNextTurnPower(s, magicNumber)));
                 }
             }
         });
@@ -50,7 +52,8 @@ public class TheaterOfDeath extends EWCardBase {
     @Override
     public void applyPowers() {
         int real = baseDamage;
-        if (AbstractDungeon.getMonsters().monsters.stream().anyMatch(m -> m != null && m.type == AbstractMonster.EnemyType.BOSS)) {
+        if (AbstractDungeon.getMonsters().monsters.stream().anyMatch(m -> m != null 
+                && (m.type == AbstractMonster.EnemyType.BOSS || m.type == AbstractMonster.EnemyType.ELITE))) {
             baseDamage *= 2;
         }
         super.applyPowers();
@@ -61,7 +64,8 @@ public class TheaterOfDeath extends EWCardBase {
     @Override
     public void calculateCardDamage(AbstractMonster mo) {
         int real = baseDamage;
-        if (AbstractDungeon.getMonsters().monsters.stream().anyMatch(m -> m != null && m.type == AbstractMonster.EnemyType.BOSS)) {
+        if (AbstractDungeon.getMonsters().monsters.stream().anyMatch(m -> m != null
+                && (m.type == AbstractMonster.EnemyType.BOSS || m.type == AbstractMonster.EnemyType.ELITE))) {
             baseDamage *= 2;
         }
         super.calculateCardDamage(mo);

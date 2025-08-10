@@ -26,6 +26,9 @@ public class MendCardsAction extends AbstractGameAction {
     @Override
     public void update() {
         isDone = true;
-        cardsToMend.stream().filter(Objects::nonNull).forEach(CardUtils::MendCard);
+        cardsToMend.stream().filter(Objects::nonNull).forEach(c -> {
+            c.superFlash();
+            CardUtils.MendCard(c);
+        });
     }
 }

@@ -2,10 +2,10 @@
     "${mod.id}:GiftPower": {
         "NAME": "好礼",
         "DESCRIPTIONS": [
-            "造成的伤害减少 #b%1$d%% .  #y炸弹 会引爆所有好礼，并造成 #b%2$%d 点伤害。"
+            "造成的伤害减少 #b%1$.1f%% .  #y炸弹 会引爆所有好礼，并造成 #b%2$d 点伤害。"
         ]
     },
-    "${mod.id}:TargetedEliminationPower": {
+    "${mod.id}:LocalizedLiquidationPower": {
         "NAME": "定点清算",
         "DESCRIPTIONS": [
             "受到的来自 #y炸弹 的伤害增加 #b%1$d%% ."
@@ -71,6 +71,48 @@
         "DESCRIPTIONS": [
             "所有 #y魂灵之影 在回合结束时额外触发 #b%1$d 次。",
             "保留并修复"
+        ]
+    },
+    "${mod.id}:AdvancedExtendedPower": {
+        "NAME": "尖端扩容",
+        "DESCRIPTIONS": [
+            "#y炸弹 可以选择牌来 #y损毁 。所有 #y炸弹 增加 #b%1$d 插槽。"
+        ]
+    },
+    "${mod.id}:LogisticalSupportPower": {
+        "NAME": "后勤保障",
+        "DESCRIPTIONS": [
+            "在你的回合开始时，将 #b%1$d 张随机 #y零件牌 放入手牌。"
+        ]
+    },
+    "${mod.id}:LordOfRevenantPower": {
+        "NAME": "魂灵之主",
+        "DESCRIPTIONS": [
+            "所有 #y魂灵之影 造成的伤害、给予的 #y好礼 和最大生命翻倍。"
+        ]
+    },
+    "${mod.id}:ExplosiveDawnPower": {
+        "NAME": "爆裂黎明",
+        "DESCRIPTIONS": [
+            "每回合开始时，将 #b%1$d 张 #y弹药 放入手牌。"
+        ]
+    },
+    "${mod.id}:BladeOfRevenantPower": {
+        "NAME": "魂灵之刃",
+        "DESCRIPTIONS": [
+            "每有一次攻击造成未被 #y格挡 的伤害，就给予 #b%1$d 层 #y好礼 。"
+        ]
+    },
+    "${mod.id}:OmegaFormPower": {
+        "NAME": "毁灭形态",
+        "DESCRIPTIONS": [
+            "所有攻击现在会同时对所有敌人造成伤害，仅存在一个敌人时，维什戴尔所有造成的伤害翻倍。"
+        ]
+    },
+    "${mod.id}:GiftOfRevenantPower": {
+        "NAME": "魂灵之赠",
+        "DESCRIPTIONS": [
+            "#b%d 张特殊 #y零件 已加入本场战斗奖励中。"
         ]
     }
 }

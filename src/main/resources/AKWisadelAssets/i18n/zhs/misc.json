@@ -1,7 +1,9 @@
 {
-    "tip.DamagedCardMod.title": "已损毁",
-    "tip.DamagedCardMod.desc": "这张牌在打出或者再次损毁时，会 #y消耗 。",
+    "DamagedCardMod.title": "已损毁",
+    "DamagedCardMod.desc": "这张牌在打出或者再次损毁时，会 #y消耗 。",
     "PronYouPlayer": "你",
     "MendCardAction": "修复",
-    "DamageCardAction": "损毁"
+    "DamageCardAction": "损毁",
+    "Revenant.title": "魂灵之影",
+    "Revenant.desc": "在你的回合结束时，对一名随机敌人造成 #b%1$d 点伤害并给予 #b%2$d 层 #y好礼 。"
 }

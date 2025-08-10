@@ -7,10 +7,12 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import org.apache.logging.log4j.util.Strings;
+import rs.moranzc.akwisadel.core.Kazdel;
 import rs.moranzc.akwisadel.localization.I18nManager;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -29,7 +31,7 @@ public class MendCardsInHandAction extends AbstractGameAction {
         anyNumber = !random;
         canPickZero = anyNumber;
         matcher = CardUtils::IsDamaged;
-        msg = I18nManager.MT("MendDamageCardAction");
+        msg = I18nManager.MT("MendCardAction");
         firstFramed = false;
         duration = startDuration = Settings.ACTION_DUR_FAST;
         actionType = ActionType.CARD_MANIPULATION;
@@ -64,12 +66,12 @@ public class MendCardsInHandAction extends AbstractGameAction {
     @Override
     public void update() {
         AbstractPlayer p = AbstractDungeon.player;
-        if (p.hand.isEmpty() || amount <= 0) {
-            isDone = true;
-            return;
-        }
         if (!firstFramed) {
             firstFramed = true;
+            if (p.hand.isEmpty() || amount <= 0) {
+                isDone = true;
+                return;
+            }
             cardsToReturn = p.hand.group;
             ArrayList<AbstractCard> matched = (ArrayList<AbstractCard>) p.hand.group.stream().filter(matcher).collect(Collectors.toList());
             amount = Math.min(amount, matched.size());
@@ -80,6 +82,7 @@ public class MendCardsInHandAction extends AbstractGameAction {
             if (random) {
                 for (int i = 0; i < amount; i++) {
                     AbstractCard c = matched.remove(AbstractDungeon.cardRandomRng.random(matched.size() - 1));
+                    c.superFlash();
                     CardUtils.MendCard(c);
                 }
                 isDone = true;
@@ -89,15 +92,18 @@ public class MendCardsInHandAction extends AbstractGameAction {
                 AbstractDungeon.handCardSelectScreen.open(msg, amount, anyNumber, canPickZero);
             }
         }
-        if (firstFramed && !AbstractDungeon.handCardSelectScreen.wereCardsRetrieved) {
+        if (firstFramed && !AbstractDungeon.handCardSelectScreen.selectedCards.isEmpty()) {
+            Kazdel.logger.info("======Mending cards...");
+            List<AbstractCard> cardsToMend = new ArrayList<>();
             for (AbstractCard c : AbstractDungeon.handCardSelectScreen.selectedCards.group) {
-                CardUtils.MendCard(c);
+                c.superFlash();
+                cardsToMend.add(c);
             }
             AbstractDungeon.handCardSelectScreen.wereCardsRetrieved = true;
             AbstractDungeon.handCardSelectScreen.selectedCards.clear();
             p.hand.group = cardsToReturn;
             p.hand.refreshHandLayout();
-            cardsToReturn.clear();
+            addToTop(new MendCardsAction(cardsToMend));
         }
         tickDuration();
     }

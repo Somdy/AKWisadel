@@ -5,10 +5,12 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import rs.moranzc.akwisadel.core.Kazdel;
 import rs.moranzc.akwisadel.localization.I18nManager;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -62,22 +64,24 @@ public class DamageCardsInHandAction extends AbstractGameAction {
     @Override
     public void update() {
         AbstractPlayer p = AbstractDungeon.player;
-        if (p.hand.isEmpty() || amount <= 0) {
-            isDone = true;
-            return;
-        }
         if (!firstFramed) {
             firstFramed = true;
+            if (p.hand.isEmpty() || amount <= 0) {
+                isDone = true;
+                return;
+            }
             cardsToReturn = p.hand.group;
             ArrayList<AbstractCard> matched = (ArrayList<AbstractCard>) p.hand.group.stream().filter(matcher).collect(Collectors.toList());
             amount = Math.min(amount, matched.size());
             if (amount <= 0) {
+                Kazdel.logger.info("No matching card to damage");
                 isDone = true;
                 return;
             }
             if (random) {
                 for (int i = 0; i < amount; i++) {
                     AbstractCard c = matched.remove(AbstractDungeon.cardRandomRng.random(matched.size() - 1));
+                    c.superFlash();
                     CardUtils.DamageCard(c);
                 }
                 isDone = true;
@@ -87,15 +91,17 @@ public class DamageCardsInHandAction extends AbstractGameAction {
                 AbstractDungeon.handCardSelectScreen.open(msg, amount, anyNumber, canPickZero);
             }
         }
-        if (firstFramed && !AbstractDungeon.handCardSelectScreen.wereCardsRetrieved) {
+        if (firstFramed && !AbstractDungeon.handCardSelectScreen.selectedCards.isEmpty()) {
+            List<AbstractCard> cardsToDamage = new ArrayList<>();
             for (AbstractCard c : AbstractDungeon.handCardSelectScreen.selectedCards.group) {
-                CardUtils.DamageCard(c);
+                c.superFlash();
+                cardsToDamage.add(c);
             }
             AbstractDungeon.handCardSelectScreen.wereCardsRetrieved = true;
             AbstractDungeon.handCardSelectScreen.selectedCards.clear();
             p.hand.group = cardsToReturn;
             p.hand.refreshHandLayout();
-            cardsToReturn.clear();
+            addToTop(new DamageCardsAction(p, cardsToDamage));
         }
         tickDuration();
     }

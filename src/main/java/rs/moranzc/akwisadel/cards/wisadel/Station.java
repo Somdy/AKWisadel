@@ -48,6 +48,7 @@ public class Station extends EWCardBase implements ICallOnModifierAppliedCard {
             addToTop(new AbstractGameAction() {
                 @Override
                 public void update() {
+                    isDone = true;
                     CardUtils.MendCard(Station.this);
                     addToTop(new MakeTempCardInHandAction(CardMst.GetRandomPart(), 1));
                 }

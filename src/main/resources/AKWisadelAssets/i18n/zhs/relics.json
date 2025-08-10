@@ -1,0 +1,9 @@
+{
+    "${mod.id}.relic:StarterRelic": {
+        "NAME": "死魂灵的余息",
+        "FLAVOR": "",
+        "DESCRIPTIONS": [
+            "每场战斗开始时，召唤一个 #y${mod.id}:魂灵之影 。"
+        ]
+    }
+}
