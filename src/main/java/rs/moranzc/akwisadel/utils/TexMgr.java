@@ -10,9 +10,12 @@ import java.util.Map;
 public final class TexMgr {
     private static final Map<String, Texture> cached_loaded_tex = new HashMap<>();
     
+    public static Texture CARD_BG_SMALL_DAMAGED;
     public static final Texture[] RevenantParticles = new Texture[19];
     
     public static void Initialize() {
+        
+        CARD_BG_SMALL_DAMAGED = LoadTex("AKWisadelAssets/images/cards/ui/bg_damaged.png");
         
         for (int i = 0; i < 7; i++) {
             RevenantParticles[i] = ImageMaster.loadImage(String.format("AKWisadelAssets/images/char/revenantparticles/%s.png", i));

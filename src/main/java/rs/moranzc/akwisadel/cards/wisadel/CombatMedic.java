@@ -33,8 +33,7 @@ public class CombatMedic extends EWCardBase implements ICallOnModifierAppliedCar
     @Override
     protected void onUse(AbstractPlayer s, AbstractCreature t) {
         addToBot(new GainBlockAction(s, s, block));
-        addToBot(new DamageCardsInHandAction(1, !upgraded).canPickZero(false).anyNumber(false));
-        addToBot(new MendCardsInHandAction(1, !upgraded).canPickZero(true).anyNumber(true));
+        addToBot(new MendCardsInHandAction(magicNumber, false).canPickZero(true).anyNumber(true));
     }
 
     @Override

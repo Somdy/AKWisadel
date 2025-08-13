@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import rs.moranzc.akwisadel.utils.CardUtils;
 import rs.moranzc.akwisadel.utils.TexMgr;
@@ -14,8 +16,8 @@ public class RenderDamagedMarkPatch {
     @SpirePatch(clz = AbstractCard.class, method = "renderCardBg")
     public static class RenderTempMarkPatch {
         private static TextureAtlas.AtlasRegion img = null;
-        @SpirePostfixPatch
-        public static void Postfix(AbstractCard _inst, SpriteBatch sb, float x, float y) {
+//        @SpirePostfixPatch
+        public static void PostfixRender(AbstractCard _inst, SpriteBatch sb, float x, float y) {
             if (CardUtils.IsDamaged(_inst)) {
                 if (img == null) {
                     img = new TextureAtlas.AtlasRegion(TexMgr.LoadTex("AKWisadelAssets/images/cards/ui/damaged_mark_temp.png"), 
@@ -25,6 +27,21 @@ public class RenderDamagedMarkPatch {
                         TextureAtlas.AtlasRegion.class, float.class, float.class)
                         .invoke(_inst, sb, Color.WHITE.cpy(), img, x, y);
             }
+        }
+        
+        private static TextureAtlas.AtlasRegion damagedBg = null;
+        @SpirePrefixPatch
+        public static SpireReturn RenderDamagedBg(AbstractCard _inst, SpriteBatch sb, float x, float y) {
+            if (CardUtils.IsDamaged(_inst)) {
+                if (damagedBg == null) {
+                    damagedBg = new TextureAtlas.AtlasRegion(TexMgr.CARD_BG_SMALL_DAMAGED, 0, 0, 512, 512);
+                }
+                ReflectionHacks.privateMethod(AbstractCard.class, "renderHelper", SpriteBatch.class, Color.class,
+                                TextureAtlas.AtlasRegion.class, float.class, float.class)
+                        .invoke(_inst, sb, Color.WHITE.cpy(), damagedBg, x, y);
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 }
