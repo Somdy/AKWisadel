@@ -1,7 +1,7 @@
 {
-    "${mod.id}.relic:StarterRelic": {
+    "${mod.id}.relic:StarterRelicEW": {
         "NAME": "死魂灵的余息",
-        "FLAVOR": "",
+        "FLAVOR": "其实是“祖宗发射器”",
         "DESCRIPTIONS": [
             "每场战斗开始时，召唤一个 #y${mod.id}:魂灵之影 。"
         ]

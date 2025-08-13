@@ -13,4 +13,9 @@ public abstract class EWRelicBase extends CustomRelic {
     public static String MakeID(String rawID) {
         return Kazdel.RELIC_PREFIX.concat(":").concat(rawID);
     }
+
+    @Override
+    public String getUpdatedDescription() {
+        return DESCRIPTIONS[0];
+    }
 }

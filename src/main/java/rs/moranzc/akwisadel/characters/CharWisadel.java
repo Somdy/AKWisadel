@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationStateData;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -16,11 +17,13 @@ import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.events.city.Vampires;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.relics.CharonsAshes;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
+import rs.moranzc.akcharlib.examples.EWSkinNovaDD;
+import rs.moranzc.akcharlib.interfaces.IAKSkinnableChar;
 import rs.moranzc.akwisadel.cards.wisadel.*;
 import rs.moranzc.akwisadel.core.Kazdel;
 import rs.moranzc.akwisadel.patches.EWEnums;
@@ -30,20 +33,21 @@ import rs.moranzc.akwisadel.relics.StarterRelicEW;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static rs.moranzc.akwisadel.core.Kazdel.*;
 
-public class CharWisadel extends CustomPlayer {
+public class CharWisadel extends CustomPlayer implements IAKSkinnableChar {
     public static final String ID = Kazdel.MakeID("CharWisadel");
     private static final CharacterStrings strings = CardCrawlGame.languagePack.getCharacterString(ID);
     public static final String[] NAMES = strings.NAMES;
     public static final String[] TEXT = strings.TEXT;
-    public static final String Shoulder_1 = "AKWisadelAssets/images/char/shoulder2.png";
-    public static final String Shoulder_2 = "AKWisadelAssets/images/char/shoulder1.png";
-    public static final String corpse = "AKWisadelAssets/images/char/corpse.png";
-    public static final String SK_ALT = "AKWisadelAssets/images/char/skins/nova/char_1035_wisdel.atlas";
-    public static final String SK_JSON = "AKWisadelAssets/images/char/skins/nova/char_1035_wisdel.json";
+    public static final String SHOULDER_1 = "AKWisadelAssets/images/char/shoulder2.png";
+    public static final String SHOULDER_2 = "AKWisadelAssets/images/char/shoulder1.png";
+    public static final String CORPSE = "AKWisadelAssets/images/char/corpse.png";
+    public static final String SK_ALT = "AKWisadelAssets/images/char/char_1035_wisdel.atlas";
+    public static final String SK_JSON = "AKWisadelAssets/images/char/char_1035_wisdel.json";
     private static final String[] ORB_TEXTURES = new String[]{
             "AKWisadelAssets/images/topPanel/energyOrb/layer5.png",
             "AKWisadelAssets/images/topPanel/energyOrb/layer4.png",
@@ -67,13 +71,14 @@ public class CharWisadel extends CustomPlayer {
     public static final int DRAW_PER_TURN = 5;
     public static final int MAX_REVENANTS = 3;
     private final List<Revenant> revenants = new ArrayList<>();
+    private String currSkinID = EWSkinNovaDD.ID;
 
     public static final List<AbstractCard> CARDS_DAMAGED_THIS_TURN = new ArrayList<>();
     
     public CharWisadel() {
         super("Wisadel", EWEnums.CHAR_WISADEL, ORB_TEXTURES, "AKWisadelAssets/images/topPanel/energyOrb/vfx.png", LAYER_SPEED, 
                 new SpineAnimation(SK_ALT, SK_JSON, 1.8F));
-        initializeClass(null, Shoulder_2, Shoulder_1, corpse, getLoadout(), 0.0F, 0.0F,
+        initializeClass(null, SHOULDER_2, SHOULDER_1, CORPSE, getLoadout(), 0.0F, 0.0F,
                 200.0F, 220.0F, new EnergyManager(3));
         stateData.setMix("Idle", "Die", 0.1F);
         AnimationState.TrackEntry e = state.setAnimation(0, "Idle", true);
@@ -290,5 +295,25 @@ public class CharWisadel extends CustomPlayer {
     @Override
     public String getVampireText() {
         return Vampires.DESCRIPTIONS[1];
+    }
+
+    @Override
+    public void loadSkin(String skinID, SpineAnimation anim, String shoulder1, String shoulder2, String corpse, BiConsumer<AnimationState, AnimationStateData> postProcessor) {
+        currSkinID = skinID;
+        shoulderImg.dispose();
+        shoulder2Img.dispose();
+        corpseImg.dispose();
+        shoulderImg = ImageMaster.loadImage(shoulder1);
+        shoulder2Img = ImageMaster.loadImage(shoulder2);
+        corpseImg = ImageMaster.loadImage(corpse);
+        if (atlas != null)
+            atlas.dispose();
+        loadAnimation(anim.atlasUrl, anim.skeletonUrl, anim.scale);
+        if (postProcessor != null) {
+            postProcessor.accept(state, stateData);
+        } else {
+            AnimationState.TrackEntry e = this.state.setAnimation(0, "Idle", true);
+            e.setTime(e.getEndTime() * MathUtils.random());
+        }
     }
 }

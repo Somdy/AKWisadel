@@ -1,10 +1,10 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
-import basemod.patches.com.megacrit.cardcrawl.screens.compendium.CardLibraryScreen.NoCompendium;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -13,7 +13,6 @@ import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 
-@NoCompendium
 public class OldsAndYoungs extends EWCardBase implements IPartCard {
     public static final String ID = MakeID(OldsAndYoungs.class.getSimpleName());
     
@@ -43,8 +42,21 @@ public class OldsAndYoungs extends EWCardBase implements IPartCard {
     
     private OldsAndYoungs getEtherealCopy() {
         OldsAndYoungs o = new OldsAndYoungs();
-        o.rawDescription = o.strings.customs.get("Extd0");
-        o.initializeDescription();
+        o.isEthereal = true;
+        o.selfRetain = false;
         return o;
+    }
+
+    @Override
+    public AbstractCard makeStatEquivalentCopy() {
+        AbstractCard c = super.makeStatEquivalentCopy();
+        if (isEthereal) {
+            c.rawDescription = strings.customs.get("Extd0");
+            c.initializeDescription();
+            c.isEthereal = true;
+            c.selfRetain = false;
+            c.retain = false;
+        }
+        return c;
     }
 }

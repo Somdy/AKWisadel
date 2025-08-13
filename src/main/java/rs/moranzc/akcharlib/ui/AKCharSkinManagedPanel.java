@@ -17,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rs.moranzc.akcharlib.interfaces.IAKCharSkin;
 import rs.moranzc.akcharlib.interfaces.IAKSkinnableChar;
+import rs.moranzc.akwisadel.core.Kazdel;
 
 import java.util.*;
 
@@ -84,6 +85,10 @@ public final class AKCharSkinManagedPanel {
         }
     }
     
+    public List<IAKCharSkin> getSkins(AbstractPlayer.PlayerClass playerClass) {
+        return allCharSkinsMap.get(playerClass.name());
+    }
+    
     public void reset() {
         skinsUpdated = false;
         if (skinCharPortraitBg != null) {
@@ -144,7 +149,7 @@ public final class AKCharSkinManagedPanel {
             prevArrow.clickStarted = true;
             CardCrawlGame.sound.play("UI_CLICK_1");
         }
-        if (InputHelper.justClickedRight && nextArrow.hovered) {
+        if (InputHelper.justClickedLeft && nextArrow.hovered) {
             nextArrow.clickStarted = true;
             CardCrawlGame.sound.play("UI_CLICK_1");
         }
@@ -182,6 +187,7 @@ public final class AKCharSkinManagedPanel {
     private void switchSkin(CharacterOption o) {
         int currCharSkinIndex = currSkinIndex.compute(getCharMapKey(o), (k,v) -> v == null ? 0 : Math.min(v, availableSkins.size() - 1));
         currSkin = availableSkins.get(currCharSkinIndex);
+        Kazdel.logger.info("Current skin for char {}: {}", o.c.chosenClass, currSkin.identifier());
         skinCharHp = currSkin.characterMaxHp(o.c) + "/" + currSkin.characterMaxHp(o.c);
         skinCharName = currSkin.characterName(o.c);
         skinCharDesc = currSkin.characterDesc(o.c);
@@ -220,6 +226,7 @@ public final class AKCharSkinManagedPanel {
             if (!s.unlocked(o.c, o.c.getPrefs()))
                 continue;
             availableSkins.add(s);
+            availableSkins.sort((o1, o2) -> o2.index() - o1.index());
         }
         skinsUpdated = true;
     }

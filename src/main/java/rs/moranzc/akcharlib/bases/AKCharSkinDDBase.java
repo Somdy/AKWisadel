@@ -19,8 +19,10 @@ import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rs.moranzc.akcharlib.core.CLOSURE;
 import rs.moranzc.akcharlib.interfaces.IAKCharSkin;
 import rs.moranzc.akcharlib.interfaces.IAKSkinnableChar;
+import rs.moranzc.akwisadel.core.Kazdel;
 
 import java.util.function.BiConsumer;
 
@@ -110,11 +112,13 @@ public abstract class AKCharSkinDDBase implements IAKCharSkin {
 
     @Override
     public void switchedToThis(AbstractPlayer p) {
-        if (loadPreviewModelAnimation(p) && loadDynPortraitAnimation(p)) 
-            onSwitchedToThis(p);
+        loadPreviewModelAnimation(p);
+        loadDynPortraitAnimation(p);
+        onSwitchedToThis(p);
+        CLOSURE.CHAR_SKIN_SAVE_MAP.put(p.chosenClass.name(), identifier());
     }
     
-    private boolean loadPreviewModelAnimation(AbstractPlayer p) {
+    private void loadPreviewModelAnimation(AbstractPlayer p) {
         SpineAnimation animation = previewModelAnimation(p);
         String atlasUrl = animation.atlasUrl;
         String skeletonUrl = animation.skeletonUrl;
@@ -124,36 +128,32 @@ public abstract class AKCharSkinDDBase implements IAKCharSkin {
             if (atlas != null) 
                 atlas.dispose();
             atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
-            SkeletonJson json = new SkeletonJson(atlas);
-            json.setScale(Settings.renderScale / animation.scale);
-            SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
-            skeleton = new Skeleton(skeletonData);
-            stateData = new AnimationStateData(skeleton.getData());
-            state = new AnimationState(stateData);
-            return true;
         }
-        return false;
+        SkeletonJson json = new SkeletonJson(atlas);
+        json.setScale(Settings.renderScale / animation.scale);
+        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
+        skeleton = new Skeleton(skeletonData);
+        stateData = new AnimationStateData(skeleton.getData());
+        state = new AnimationState(stateData);
     }
     
-    private boolean loadDynPortraitAnimation(AbstractPlayer p) {
+    private void loadDynPortraitAnimation(AbstractPlayer p) {
         SpineAnimation animation = dynPortraitAnimation(p);
         String atlasUrl = animation.atlasUrl;
         String skeletonUrl = animation.skeletonUrl;
         if (!atlasUrl.equals(cachedDynAtlasUrl) || !skeletonUrl.equals(cachedDynSkeletonUrl)) {
             cachedDynAtlasUrl = atlasUrl;
             cachedDynSkeletonUrl = skeletonUrl;
-            if (dynAtlas != null) 
+            if (dynAtlas != null)
                 dynAtlas.dispose();
             dynAtlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
-            SkeletonJson json = new SkeletonJson(dynAtlas);
-            json.setScale(Settings.renderScale / animation.scale);
-            SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
-            dynSkeleton = new Skeleton(skeletonData);
-            dynStateData = new AnimationStateData(skeleton.getData());
-            dynState = new AnimationState(dynStateData);
-            return true;
         }
-        return false;
+        SkeletonJson json = new SkeletonJson(dynAtlas);
+        json.setScale(Settings.renderScale / animation.scale);
+        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
+        dynSkeleton = new Skeleton(skeletonData);
+        dynStateData = new AnimationStateData(dynSkeleton.getData());
+        dynState = new AnimationState(dynStateData);
     }
     
     protected abstract void onSwitchedToThis(AbstractPlayer p);

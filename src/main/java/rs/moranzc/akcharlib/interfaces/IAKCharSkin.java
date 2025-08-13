@@ -12,6 +12,8 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import java.util.ArrayList;
 
 public interface IAKCharSkin extends Disposable {
+    int DEFAULT_SKIN_INDEX = 0;
+    
     String identifier();
     String skinName(AbstractPlayer p);
     String skinDesc(AbstractPlayer p);
@@ -29,4 +31,8 @@ public interface IAKCharSkin extends Disposable {
     void useStaggerAnimation(AbstractPlayer p);
     void update(CharacterOption opt, Hitbox displayArea, float infoX, float deltaTime);
     void render(SpriteBatch sb, CharacterOption opt, Hitbox displayArea);
+    
+    default int index() {
+        return DEFAULT_SKIN_INDEX;
+    }
 }

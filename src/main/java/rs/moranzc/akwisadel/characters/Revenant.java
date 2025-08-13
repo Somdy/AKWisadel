@@ -1,6 +1,5 @@
 package rs.moranzc.akwisadel.characters;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,7 +23,6 @@ import rs.moranzc.akwisadel.localization.I18nManager;
 import rs.moranzc.akwisadel.powers.GiftPower;
 import rs.moranzc.akwisadel.powers.LordOfRevenantPower;
 import rs.moranzc.akwisadel.powers.OrderOfRevenantPower;
-import rs.moranzc.akwisadel.utils.TexMgr;
 
 public class Revenant {
     private static Texture REVENANT_TEX = ImageMaster.loadImage("AKWisadelAssets/images/char/Revenant.png");
@@ -46,8 +44,6 @@ public class Revenant {
     protected int currHP;
     protected boolean dead;
     protected int moveTimes;
-    private float particleTimer;
-    private int particleIndex;
     
     public Revenant() {
         hb = new Hitbox(WIDTH * Settings.scale, HEIGHT * Settings.scale);
@@ -123,12 +119,6 @@ public class Revenant {
         }
         hb.update();
         applyPowers();
-        if (particleTimer <= 0.0F) {
-            particleTimer = particle_timer_reset;
-            particleIndex = (particleIndex + 1) % TexMgr.RevenantParticles.length;
-        } else {
-            particleTimer -= Gdx.graphics.getDeltaTime();
-        }
     }
     
     public void render(SpriteBatch sb) {
@@ -136,10 +126,6 @@ public class Revenant {
         sb.setColor(Color.WHITE.cpy());
         sb.draw(REVENANT_TEX, hb.x, hb.y, WIDTH / 2.0F, HEIGHT / 2.0F, WIDTH, HEIGHT, Settings.scale, Settings.scale, 
                 0.0F, 0, 0, WIDTH, HEIGHT, false, false);
-        sb.draw(TexMgr.RevenantParticles[particleIndex], hb.x - 180.0F * Settings.scale, hb.y - 301.0F * Settings.scale, 
-                P_WIDTH / 2.0F, P_HEIGHT / 2.0F, 
-                P_WIDTH, P_HEIGHT, Settings.scale * 0.65F, Settings.scale * 0.65F, 
-                0.0F, 0, 0, P_WIDTH, P_HEIGHT, false, false);
         FontHelper.renderFontCentered(sb, FontHelper.energyNumFontRed, currHP + "/" + maxHP, hb.cX, hb.y - 15.0F * Settings.scale);
         FontHelper.renderFont(sb, FontHelper.energyNumFontRed, String.valueOf(damage), hb.cX - hb.width * 0.2F, hb.y + hb.height,
                 isDamageModified ? Color.GREEN.cpy() : Color.WHITE.cpy());

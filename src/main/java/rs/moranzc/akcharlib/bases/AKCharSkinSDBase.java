@@ -18,8 +18,10 @@ import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rs.moranzc.akcharlib.core.CLOSURE;
 import rs.moranzc.akcharlib.interfaces.IAKCharSkin;
 import rs.moranzc.akcharlib.interfaces.IAKSkinnableChar;
+import rs.moranzc.akwisadel.core.Kazdel;
 
 import java.util.function.BiConsumer;
 
@@ -99,14 +101,15 @@ public abstract class AKCharSkinSDBase implements IAKCharSkin {
             if (atlas != null) 
                 atlas.dispose();
             atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
-            SkeletonJson json = new SkeletonJson(atlas);
-            json.setScale(Settings.renderScale / animation.scale);
-            SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
-            skeleton = new Skeleton(skeletonData);
-            stateData = new AnimationStateData(skeleton.getData());
-            state = new AnimationState(stateData);
-            onSwitchedToThis(p);
         }
+        SkeletonJson json = new SkeletonJson(atlas);
+        json.setScale(Settings.renderScale / animation.scale);
+        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
+        skeleton = new Skeleton(skeletonData);
+        stateData = new AnimationStateData(skeleton.getData());
+        state = new AnimationState(stateData);
+        onSwitchedToThis(p);
+        CLOSURE.CHAR_SKIN_SAVE_MAP.put(p.chosenClass.name(), identifier());
     }
     
     protected abstract void onSwitchedToThis(AbstractPlayer p);

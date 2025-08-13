@@ -26,13 +26,13 @@ public final class TexMgr {
     }
     
     public static Texture LoadRelicTex(String relicID) {
-        relicID = relicID.replace(Kazdel.RELIC_PREFIX, "");
+        relicID = relicID.replace(Kazdel.RELIC_PREFIX + ":", "");
         String path = String.format("AKWisadelAssets/images/relics/%s.png", relicID);
         return LoadTex(path);
     }
 
     public static Texture LoadRelicOutlineTex(String relicID) {
-        relicID = relicID.replace(Kazdel.RELIC_PREFIX, "");
+        relicID = relicID.replace(Kazdel.RELIC_PREFIX + ":", "");
         String path = String.format("AKWisadelAssets/images/relics/%s_o.png", relicID);
         return LoadTex(path);
     }

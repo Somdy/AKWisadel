@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel.derived;
 
+import basemod.patches.com.megacrit.cardcrawl.screens.compendium.CardLibraryScreen.NoCompendium;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
@@ -12,6 +13,7 @@ import rs.moranzc.akwisadel.core.CardMst;
 
 import java.util.List;
 
+@NoCompendium
 public class MicroBomb extends EWBombCardBase {
     public static final String ID = MakeID(MicroBomb.class.getSimpleName());
     

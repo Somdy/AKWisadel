@@ -6,6 +6,4 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 public class ClippingAdapterPatch {
     @SpireEnum
     public static AttachmentType clipping;
-    
-    
 }
