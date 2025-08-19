@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -10,6 +11,7 @@ import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.characters.CharWisadel;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
+@AutoAdd.Ignore
 public class LoneWolf extends EWCardBase {
     public static final String ID = MakeID(LoneWolf.class.getSimpleName());
     private boolean lonewolf;
@@ -37,7 +39,7 @@ public class LoneWolf extends EWCardBase {
     public void applyPowers() {
         int real = baseDamage;
         lonewolf = cpr().hand.contains(this) && !CardUtils.IsDamaged(this)
-                && cpr().hand.group.stream().allMatch(c -> CardUtils.IsDamaged(c) && c != this);
+                && cpr().hand.group.stream().allMatch(c -> (c != this && CardUtils.IsDamaged(c)) || (c == this && !CardUtils.IsDamaged(c) ));
         if (lonewolf) {
             baseDamage *= magicNumber;
         }
@@ -50,7 +52,7 @@ public class LoneWolf extends EWCardBase {
     public void calculateCardDamage(AbstractMonster mo) {
         int real = baseDamage;
         lonewolf = cpr().hand.contains(this) && !CardUtils.IsDamaged(this)
-                && cpr().hand.group.stream().allMatch(c -> CardUtils.IsDamaged(c) && c != this);
+                && cpr().hand.group.stream().allMatch(c -> (c != this && CardUtils.IsDamaged(c)) || (c == this && !CardUtils.IsDamaged(c) ));
         if (lonewolf) {
             baseDamage *= magicNumber;
         }

@@ -67,10 +67,10 @@ public class PlayTopCardsCallbackAction extends AbstractGameAction {
         if (target != null && target instanceof AbstractMonster) {
             card.calculateCardDamage((AbstractMonster) target);
         }
-        if (callback != null)
-            callback.accept(card);
         addToTop(new NewQueueCardAction(card, target, false, true));
         addToTop(new UnlimboAction(card));
         addToTop(new WaitAction(Settings.ACTION_DUR_XFAST));
+        if (callback != null)
+            callback.accept(card);
     }
 }

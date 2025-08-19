@@ -20,8 +20,9 @@ public class BloodstainedHewer extends EWCardBase {
     public BloodstainedHewer() {
         super(ID, "ew/BloodstainedHewer.png", 1, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
         setDamage(7);
-        setMagic(3);
+        setMagic(2);
         isMultiDamage = true;
+        selfRetain = true;
     }
 
     @Override
@@ -32,8 +33,7 @@ public class BloodstainedHewer extends EWCardBase {
     @Override
     protected void onUpgrade() {
         upgradeTexts();
-        selfRetain = true;
-        upgradeDamage(5);
+        upgradeDamage(3);
     }
 
     @Override

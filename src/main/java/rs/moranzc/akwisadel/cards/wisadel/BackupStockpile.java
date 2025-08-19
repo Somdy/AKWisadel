@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import rs.moranzc.akwisadel.base.EWCardBase;
+import rs.moranzc.akwisadel.cards.wisadel.derived.SupplementaryCharge;
 import rs.moranzc.akwisadel.powers.BackupStockpilePower;
 import rs.moranzc.akwisadel.powers.PensionPower;
 
@@ -13,6 +14,7 @@ public class BackupStockpile extends EWCardBase {
     public BackupStockpile() {
         super(ID, "ew/BackupStockpile.png", 1, CardType.POWER, CardRarity.UNCOMMON, CardTarget.SELF);
         setMagic(1);
+        cardsToPreview = new SupplementaryCharge();
     }
 
     @Override

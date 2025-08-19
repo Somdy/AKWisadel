@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -32,6 +33,6 @@ public class Stupor extends EWCardBase implements IPartCard {
 
     @Override
     public void onAppliedOnBomb(EWBombCardBase card, AbstractPlayer s, AbstractCreature t, float slotEfficiency) {
-        addToBot(new DrawCardAction(s, extraMagic));
+        addToBot(new DrawCardAction(s, MathUtils.floor(extraMagic * slotEfficiency)));
     }
 }

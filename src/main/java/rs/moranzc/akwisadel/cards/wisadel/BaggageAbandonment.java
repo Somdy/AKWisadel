@@ -12,7 +12,7 @@ public class BaggageAbandonment extends EWCardBase {
     
     public BaggageAbandonment() {
         super(ID, "ew/BaggageAbandonment.png", 1, CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF);
-        setMagic(2);
+        setMagic(3);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
@@ -13,6 +14,7 @@ import rs.moranzc.akwisadel.base.EWBombCardBase;
 
 import java.util.List;
 
+@AutoAdd.Ignore
 public class AN602 extends EWBombCardBase {
     public static final String ID = MakeID(AN602.class.getSimpleName());
     private boolean bombThemAll;

@@ -17,7 +17,7 @@ public class FirstRevenant extends EWCardBase {
     public static final String ID = MakeID(FirstRevenant.class.getSimpleName());
     
     public FirstRevenant() {
-        super(ID, "ew/FirstRevenant.png", 2, CardType.SKILL, CardRarity.BASIC, CardTarget.NONE);
+        super(ID, "ew/FirstRevenant.png", 1, CardType.SKILL, CardRarity.BASIC, CardTarget.NONE);
         setMagic(2);
         exhaust = true;
     }
@@ -25,16 +25,12 @@ public class FirstRevenant extends EWCardBase {
     @Override
     protected void onUse(AbstractPlayer s, AbstractCreature t) {
         addToBot(new DamageAction(t, new DamageInfo(s, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
-        addToBot(new SummonRevenantAction(1, r -> {
-            for (int i = 0; i < magicNumber; i++) {
-                r.takeMove();
-            }
-        }));
+        addToBot(new SummonRevenantAction(1, r -> r.takeMove(magicNumber)));
     }
 
     @Override
     protected void onUpgrade() {
         upgradeTexts();
-        upgradeMagicNumber(1);
+        upgradeBaseCost(0);
     }
 }

@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import rs.moranzc.akwisadel.base.EWCardBase;
-import rs.moranzc.akwisadel.powers.OrderOfRevenantPower;
 
 public class WarJunkie extends EWCardBase {
     public static final String ID = MakeID(WarJunkie.class.getSimpleName());
@@ -15,6 +14,7 @@ public class WarJunkie extends EWCardBase {
     public WarJunkie() {
         super(ID, "ew/WarJunkie.png", 1, CardType.POWER, CardRarity.UNCOMMON, CardTarget.SELF);
         setMagic(1);
+        setExtraMagic(1);
     }
 
     @Override
@@ -25,13 +25,13 @@ public class WarJunkie extends EWCardBase {
     @Override
     protected void onUpgrade() {
         upgradeTexts();
-        upgradeMagicNumber(1);
+        upgradeExtraMagic(1);
     }
 
     @Override
     public void applyPowers() {
         int real = baseMagicNumber;
-        baseMagicNumber += (int) AbstractDungeon.getMonsters().monsters.stream().filter(m -> m != null && !m.isDeadOrEscaped()).count();
+        baseMagicNumber += (int) AbstractDungeon.getMonsters().monsters.stream().filter(m -> m != null && !m.isDeadOrEscaped()).count() * extraMagic;
         super.applyPowers();
         magicNumber = baseMagicNumber;
         baseMagicNumber = real;
@@ -41,7 +41,7 @@ public class WarJunkie extends EWCardBase {
     @Override
     public void calculateCardDamage(AbstractMonster mo) {
         int real = baseMagicNumber;
-        baseMagicNumber += (int) AbstractDungeon.getMonsters().monsters.stream().filter(m -> m != null && !m.isDeadOrEscaped()).count();
+        baseMagicNumber += (int) AbstractDungeon.getMonsters().monsters.stream().filter(m -> m != null && !m.isDeadOrEscaped()).count() * extraMagic;
         super.calculateCardDamage(mo);
         magicNumber = baseMagicNumber;
         baseMagicNumber = real;

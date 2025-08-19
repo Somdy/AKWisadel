@@ -17,6 +17,7 @@ public class LayDying extends EWCardBase {
     public LayDying() {
         super(ID, "ew/LayDying.png", 0, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY);
         setDamage(4);
+        setExtraMagic(2);
         setMagic(2);
     }
 
@@ -28,12 +29,13 @@ public class LayDying extends EWCardBase {
     @Override
     protected void onUpgrade() {
         upgradeTexts();
-        upgradeDamage(2);
+        upgradeMagicNumber(1);
+        upgradeExtraMagic(1);
     }
 
     @Override
     public void triggerOnExhaust() {
         addToTop(new DrawCardAction(magicNumber));
-        addToTop(new GainEnergyAction(2));
+        addToTop(new GainEnergyAction(extraMagic));
     }
 }

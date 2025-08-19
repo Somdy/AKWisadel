@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -9,6 +10,7 @@ import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.powers.DieOfDeathPower;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
+@AutoAdd.Ignore
 public class DieOfDeath extends EWCardBase {
     public static final String ID = MakeID(DieOfDeath.class.getSimpleName());
     

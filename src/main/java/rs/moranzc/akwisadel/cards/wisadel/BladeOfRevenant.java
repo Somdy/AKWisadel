@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -8,6 +9,7 @@ import rs.moranzc.akwisadel.cards.wisadel.derived.Ammo;
 import rs.moranzc.akwisadel.powers.BladeOfRevenantPower;
 import rs.moranzc.akwisadel.powers.ExplosiveDawnPower;
 
+@AutoAdd.Ignore
 public class BladeOfRevenant extends EWCardBase {
     public static final String ID = MakeID(BladeOfRevenant.class.getSimpleName());
     

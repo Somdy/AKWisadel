@@ -3,6 +3,7 @@ package rs.moranzc.akwisadel.actions.utility;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class GridCardSelectActionBuilder extends AbstractGameAction {
         if (matcher != null)
             this.matcher = matcher;
         actionType = ActionType.CARD_MANIPULATION;
+        duration = startDuration = Settings.ACTION_DUR_XFAST;
     }
     
     public GridCardSelectActionBuilder manipulate(BiConsumer<CardGroup, AbstractCard> action) {
@@ -92,6 +94,7 @@ public class GridCardSelectActionBuilder extends AbstractGameAction {
             cg.clear();
             isDone = true;
         }
+        tickDuration();
     }
     
     private void appendCG(CardGroup from, boolean order) {

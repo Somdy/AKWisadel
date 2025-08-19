@@ -15,7 +15,7 @@ public class DustAndSmoke extends EWCardBase implements IPartCard {
     
     public DustAndSmoke() {
         super(ID, "ew/DustAndSmoke.png", 0, CardType.SKILL, CardRarity.SPECIAL, CardTarget.SELF);
-        setBlock(2);
+        setBlock(3);
         setMagic(4);
     }
 

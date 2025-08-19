@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.powers.WeakPower;
 import rs.moranzc.akwisadel.actions.common.ApplyPowerToEnemiesAction;
 import rs.moranzc.akwisadel.actions.unique.TearsOfRevenantsAction;
 import rs.moranzc.akwisadel.base.EWCardBase;
@@ -26,7 +27,8 @@ public class TearsOfRevenants extends EWCardBase implements IOmegaFormAffectable
     @Override
     public void onUse(AbstractPlayer s, AbstractCreature t) {
         if (!affectedByOmega) {
-            addToBot(new TearsOfRevenantsAction(this, s, AbstractGameAction.AttackEffect.SLASH_VERTICAL));
+            addToBot(new TearsOfRevenantsAction(this, s, AbstractGameAction.AttackEffect.SLASH_VERTICAL)
+                    .applyPower(m -> new WeakPower(m, magicNumber, false)));
         } else {
             addToBot(new AbstractGameAction() {
                 @Override
@@ -36,7 +38,7 @@ public class TearsOfRevenants extends EWCardBase implements IOmegaFormAffectable
                             .filter(m -> m != null && !m.isDeadOrEscaped())
                             .mapToInt(m -> 1).sum();
                     for (int i = 0; i < amount; i++) {
-                        addToTop(new ApplyPowerToEnemiesAction(s, m -> new GiftPower(m, magicNumber)));
+                        addToTop(new ApplyPowerToEnemiesAction(s, m -> new WeakPower(m, magicNumber, false)));
                         addToTop(new DamageAllEnemiesAction(s, baseDamage, damageTypeForTurn, AbstractGameAction.AttackEffect.BLUNT_HEAVY));
                     }
                 }
@@ -48,6 +50,7 @@ public class TearsOfRevenants extends EWCardBase implements IOmegaFormAffectable
     protected void onUpgrade() {
         upgradeTexts();
         upgradeDamage(3);
+        upgradeMagicNumber(1);
     }
 
     @Override

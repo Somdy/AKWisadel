@@ -30,7 +30,7 @@ public class PosthumousHonors extends EWCardBase {
                 isDone = true;
                 AbstractCard c = CardMst.GetRandomCard(ca -> ca.rarity == CardRarity.RARE);
                 CardUtils.DamageCard(c);
-                if (!c.selfRetain) {
+                if (!c.selfRetain && !c.isEthereal) {
                     CardModifierManager.addModifier(c, new RetainMod());
                 }
                 addToTop(new MakeTempCardInHandAction(c, 1));

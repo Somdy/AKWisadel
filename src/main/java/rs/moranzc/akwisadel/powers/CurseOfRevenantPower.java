@@ -34,8 +34,8 @@ public class CurseOfRevenantPower extends EWPowerBase {
                             .filter(m -> m != null && !m.isDeadOrEscaped() && m.hasPower(GiftPower.POWER_ID))
                             .forEach(m -> {
                                 AbstractPower p = m.getPower(GiftPower.POWER_ID);
-                                if (p != null) {
-                                    addToTop(new ApplyPowerAction(m, source, new GiftPower(m, p.amount * amount)));
+                                if (p instanceof GiftPower) {
+                                    addToTop(new ApplyPowerAction(m, source, new GiftPower(m, p.amount * CurseOfRevenantPower.this.amount)));
                                 }
                             });
                 }

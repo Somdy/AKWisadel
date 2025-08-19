@@ -20,6 +20,7 @@ public class MemorialEcho extends EWCardBase {
         addToBot(new GridCardSelectActionBuilder(1, strings.customs.get("Msg"), s.exhaustPile, CardUtils::IsDamaged)
                 .manipulate((cg, c) -> {
                     if (s.exhaustPile.contains(c)) {
+                        CardUtils.MendCard(c);
                         s.exhaustPile.moveToHand(c);
                         c.unfadeOut();
                         c.applyPowers();

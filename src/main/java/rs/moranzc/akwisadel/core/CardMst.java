@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.cards.dynvars.ExtraMagicVariable;
 import rs.moranzc.akwisadel.cards.dynvars.SlotVariable;
+import rs.moranzc.akwisadel.cards.wisadel.LordOfBombing;
 import rs.moranzc.akwisadel.cards.wisadel.Strike_EW;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 
@@ -22,6 +23,7 @@ public final class CardMst {
     
     private static final Map<String, EWCardBase> card_map = new HashMap<>();
     private static final Set<EWCardBase> parts = new HashSet<>();
+    private static final Set<String> special_parts = new HashSet<>();
     
     public static void Initialize() {
         new AutoAdd(Kazdel.MOD_ID)
@@ -40,6 +42,10 @@ public final class CardMst {
         BaseMod.addCard(card.makeCopy());
     }
     
+    public static boolean IsRestrictedPart(AbstractCard card) {
+        return card instanceof LordOfBombing || special_parts.stream().anyMatch(s -> s.equals(card.cardID));
+    }
+    
     public static AbstractCard GetRandomPart(Predicate<EWCardBase> matcher, Random rng) {
         List<AbstractCard> cards = parts.stream().filter(matcher).collect(Collectors.toList());
         if (cards.isEmpty())
@@ -50,8 +56,8 @@ public final class CardMst {
         return cards.get(MathUtils.random(cards.size() - 1)).makeCopy();
     }
 
-    public static AbstractCard GetRandomPart() {
-        return GetRandomPart(c -> true, AbstractDungeon.cardRandomRng);
+    public static AbstractCard GetUnrestrictedRandomPart() {
+        return GetRandomPart(c -> !IsRestrictedPart(c), AbstractDungeon.cardRandomRng);
     }
     
     public static AbstractCard GetRandomCard(Predicate<EWCardBase> matcher, Random rng) {

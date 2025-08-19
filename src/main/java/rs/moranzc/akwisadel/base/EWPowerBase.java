@@ -1,11 +1,16 @@
 package rs.moranzc.akwisadel.base;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -25,6 +30,12 @@ public abstract class EWPowerBase extends AbstractPower {
     protected String[] desc;
     public AbstractCreature source;
     public boolean stackable;
+    public int extraAmt = -1;
+    public boolean canExtraAmtGoNegative;
+    public boolean extraAmtStackable;
+    protected Color red = new Color(1.0F, 0.0F, 0.0F, 1.0F);
+    protected Color blue = new Color(0.0F, 0.0F, 1.0F, 1.0F);
+    protected float extraAmtFontScale;
     
     public EWPowerBase(String baseID, String imgName, PowerType type, AbstractCreature owner) {
         ID = baseID;
@@ -46,14 +57,24 @@ public abstract class EWPowerBase extends AbstractPower {
     }
 
     protected void setValues(AbstractCreature owner, AbstractCreature source, int amount) {
+        setValues(owner, source, amount, -1);
+    }
+
+    protected void setValues(AbstractCreature owner, AbstractCreature source, int amount, int extraAmt) {
         this.owner = owner;
         this.source = source;
         this.amount = amount;
+        this.extraAmt = extraAmt;
         this.stackable = amount > 0 || canGoNegative;
+        extraAmtStackable = extraAmt > 0 || canExtraAmtGoNegative;
     }
 
     protected void setValues(AbstractCreature source, int amount) {
         setValues(owner, source, amount);
+    }
+    
+    protected void setValues(AbstractCreature source, int amount, int extraAmt) {
+        setValues(owner, source, amount, extraAmt);
     }
 
     protected void preloadString(Supplier<String> getString) {
@@ -125,6 +146,10 @@ public abstract class EWPowerBase extends AbstractPower {
         return 999;
     }
 
+    public int getMaxExtraAmount() {
+        return 999;
+    }
+
     @Override
     public void stackPower(int stackAmount) {
         if (this.stackable) {
@@ -135,6 +160,50 @@ public abstract class EWPowerBase extends AbstractPower {
             }
         } else {
             Kazdel.logger.info("{} does not stack", name);
+        }
+    }
+
+    public void stackExtraAmount(int stackAmount) {
+        if (!extraAmtStackable) {
+            extraAmtFontScale = 8F;
+            extraAmt += stackAmount;
+            if (extraAmt > getMaxExtraAmount()) 
+                extraAmt = getMaxExtraAmount();
+        } else {
+            Kazdel.logger.info("{} does not stack second value", name);
+        }
+    }
+
+    @Override
+    public void update(int slot) {
+        super.update(slot);
+        updateExtraFontScale();
+    }
+
+    private void updateExtraFontScale() {
+        if (extraAmtFontScale != 1F) {
+            extraAmtFontScale = MathUtils.lerp(extraAmtFontScale, 1F, Gdx.graphics.getDeltaTime() * 10F);
+            if (extraAmtFontScale - 1F < 0.05F)
+                extraAmtFontScale = 1F;
+        }
+    }
+
+    @Override
+    public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
+        super.renderAmount(sb, x, y, c);
+        if (this.extraAmt > 0) {
+            if (extraAmtStackable) {
+                blue.a = c.a;
+                c = blue;
+            }
+            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, Integer.toString(this.extraAmt),
+                    x, y + 16.0F * Settings.scale, extraAmtFontScale, c);
+        }
+        else if (this.extraAmt < 0 && canExtraAmtGoNegative) {
+            red.a = c.a;
+            c = red;
+            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, Integer.toString(this.extraAmt),
+                    x, y + 16.0F * Settings.scale, extraAmtFontScale, c);
         }
     }
 

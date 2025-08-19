@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.patches.com.megacrit.cardcrawl.cards.AbstractCard.MultiCardPreview;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -13,6 +14,7 @@ public class BombsAndSmoke extends EWCardBase {
     public BombsAndSmoke() {
         super(ID, "ew/BombsAndSmoke.png", 1, CardType.SKILL, CardRarity.COMMON, CardTarget.SELF);
         setMagic(1);
+        MultiCardPreview.add(this, new MicroBomb(), new DustAndSmoke());
     }
 
     @Override

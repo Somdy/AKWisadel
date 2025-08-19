@@ -108,6 +108,11 @@ public abstract class EWCardBase extends CustomCard {
         return AbstractDungeon.player;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s@%s", name, hashCode());
+    }
+
     public static String MakeID(String rawID) {
         return Kazdel.CARD_PREFIX.concat(":").concat(rawID);
     }

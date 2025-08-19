@@ -65,8 +65,13 @@ public class BombCardMgr {
     
     private static void applySlotsOnBomb(EWBombCardBase card, AbstractPlayer p, AbstractCreature t, List<AbstractCard> slots) {
         int numberOfSlots = slots.size();
-        if (numberOfSlots > 0) {
-            card.increaseDamageForCombat(numberOfSlots * DAMAGE_INCREMENT_PER_SLOT);
+        boolean change250816 = false;
+        if (numberOfSlots > 0 && change250816) {
+            int obd = card.baseDamage;
+            int increment = numberOfSlots * DAMAGE_INCREMENT_PER_SLOT;
+            card.increaseDamageForCombat(increment);
+            Kazdel.logger.info("Bomb {} damaging {} cards and increasing damage from {} to {}, increment: {}", 
+                    card, numberOfSlots, obd, card.baseDamage, increment);
         }
         applyPartsOnBomb(card, p, t, slots);
     }
@@ -102,6 +107,6 @@ public class BombCardMgr {
     public static void LogMetric(EWBombCardBase bomb, List<AbstractCard> cardsToDamage) {
         StringBuilder sbr = new StringBuilder();
         cardsToDamage.forEach(c -> sbr.append(String.format("%s:%s, ", c.cardID, c.name)));
-        Kazdel.logger.info("Bomb {}:{} consumed [ {} ]", bomb.cardID, bomb.name, sbr.substring(0, sbr.length() - 1));
+        Kazdel.logger.info("Bomb {}:{} consumed [ {} ]", bomb.cardID, bomb, sbr.substring(0, sbr.length() - 1));
     }
 }

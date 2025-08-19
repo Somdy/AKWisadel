@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import basemod.abstracts.AbstractCardModifier;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
@@ -21,6 +22,7 @@ import rs.moranzc.akwisadel.interfaces.cards.ICallOnModifierAppliedCard;
 import rs.moranzc.akwisadel.powers.FurnacePower;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
+@AutoAdd.Ignore
 public class Sprouting extends EWCardBase implements ICallOnModifierAppliedCard {
     public static final String ID = MakeID(Sprouting.class.getSimpleName());
     
@@ -57,12 +59,20 @@ public class Sprouting extends EWCardBase implements ICallOnModifierAppliedCard 
                     isDone = true;
                     CardUtils.MendCard(Sprouting.this);
                     CardGroup cg = CardUtils.GetAllUnexhaustedCardsInCombat(c -> c.canUpgrade() && c != Sprouting.this);
-                    for (int i = 0; i < magicNumber; i++) {
-                        AbstractCard c = cg.getRandomCard(AbstractDungeon.cardRandomRng);
+                    if (cg.isEmpty()) return;
+                    for (int i = 0; i < magicNumber && !cg.isEmpty(); i++) {
+                        AbstractCard c;
+                        if (cg.size() == 1) {
+                            c = cg.getTopCard();
+                        } else {
+                            c = cg.getRandomCard(AbstractDungeon.cardRandomRng);
+                        }
                         c.upgrade();
-                        AbstractDungeon.effectsQueue.add(new UpgradeShineEffect(Settings.WIDTH / 2.0F - (50.0F + 100.0F * i) * Settings.scale,
+                        AbstractDungeon.effectsQueue.add(new UpgradeShineEffect(Settings.WIDTH / 2.0F - AbstractCard.IMG_WIDTH + AbstractCard.IMG_WIDTH * i,
                                 Settings.HEIGHT / 2.0F));
-                        AbstractDungeon.effectsQueue.add(new ShowCardBrieflyEffect(c.makeStatEquivalentCopy()));
+                        AbstractDungeon.effectsQueue.add(new ShowCardBrieflyEffect(c.makeStatEquivalentCopy(), Settings.WIDTH / 2.0F - AbstractCard.IMG_WIDTH + AbstractCard.IMG_WIDTH * i,
+                                Settings.HEIGHT / 2.0F));
+                        cg.removeCard(c);
                     }
                 }
             });

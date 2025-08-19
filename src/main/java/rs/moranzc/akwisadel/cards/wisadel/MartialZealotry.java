@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -9,11 +10,12 @@ import rs.moranzc.akwisadel.base.EWCardBase;
 
 import java.util.stream.Collectors;
 
+@AutoAdd.Ignore
 public class MartialZealotry extends EWCardBase {
     public static final String ID = MakeID(MartialZealotry.class.getSimpleName());
     
     public MartialZealotry() {
-        super(ID, "ew/DieOfDeath.png", 1, CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF);
+        super(ID, "ew/MartialZealotry.png", 1, CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF);
         setMagic(2);
         isInnate = true;
     }

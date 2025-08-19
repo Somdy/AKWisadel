@@ -22,7 +22,7 @@ public class LogisticalSupportPower extends EWPowerBase {
         if (amount > 0 && owner != null && owner.isPlayer && !owner.isDeadOrEscaped()) {
             flash();
             for (int i = 0; i < amount; i++) {
-                AbstractCard c = CardMst.GetRandomPart();
+                AbstractCard c = CardMst.GetUnrestrictedRandomPart();
                 addToBot(new MakeTempCardInHandAction(c, 1));
             }
         }

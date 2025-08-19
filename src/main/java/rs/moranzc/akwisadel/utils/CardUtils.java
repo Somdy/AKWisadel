@@ -1,6 +1,7 @@
 package rs.moranzc.akwisadel.utils;
 
 import basemod.helpers.CardModifierManager;
+import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -11,10 +12,12 @@ import rs.moranzc.akwisadel.core.Kazdel;
 import rs.moranzc.akwisadel.interfaces.cards.ICallOnOtherCardsDamagedCard;
 import rs.moranzc.akwisadel.interfaces.cards.IPartCard;
 import rs.moranzc.akwisadel.interfaces.powers.ICallOnCardsDamagedPower;
+import rs.moranzc.akwisadel.interfaces.powers.ICallOnCardsMendedPower;
 
 import java.util.function.Predicate;
 
 public class CardUtils {
+    public static final int BLOCK_PER_MEND = 2;
 
     public static void DamageCard(AbstractCard card) {
         DamageCard(card, null);
@@ -31,10 +34,16 @@ public class CardUtils {
                 srcCG = LocateCardGroupWhereExists(card);
             }
             if (srcCG == null) {
-                Kazdel.logger.warn("Unable to find the card group where the card {} exists", card);
-                srcCG = AbstractDungeon.player.hand;
+                if (AbstractDungeon.player.exhaustPile.contains(card)) {
+                    Kazdel.logger.info("Card {} is already exhausted", card);
+                } else {
+                    Kazdel.logger.warn("Unable to find the card group where the card {} exists", card);
+                    srcCG = AbstractDungeon.player.hand;
+                }
             }
-            srcCG.moveToExhaustPile(card);
+            if (srcCG != null) {
+                srcCG.moveToExhaustPile(card);
+            }
         }
         CharWisadel.CARDS_DAMAGED_THIS_TURN.add(card);
         CardGroup cg = GetAllUnexhaustedCardsInCombat();
@@ -49,6 +58,11 @@ public class CardUtils {
     public static void MendCard(AbstractCard card) {
         if (card != null && IsDamaged(card)) {
             CardModifierManager.removeModifiersById(card, DamagedCardModifier.ID, true);
+            AbstractDungeon.player.powers.stream().filter(p -> p instanceof ICallOnCardsMendedPower)
+                    .map(p -> (ICallOnCardsMendedPower) p)
+                    .forEach(p -> p.onCardMended(card));
+            AbstractDungeon.actionManager.addToBottom(new GainBlockAction(AbstractDungeon.player, BLOCK_PER_MEND));
+            CharWisadel.CARDS_MENDED_THIS_COMBAT.add(card);
         }
     }
 

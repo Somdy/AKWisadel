@@ -4,12 +4,10 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.core.CardMst;
-import rs.moranzc.akwisadel.core.Kazdel;
 
 import java.util.List;
 
@@ -35,6 +33,6 @@ public class MagneticBomb extends EWBombCardBase {
 
     @Override
     public void triggerWhenDrawn() {
-        addToBot(new MakeTempCardInHandAction(CardMst.GetRandomPart(), 1));
+        addToBot(new MakeTempCardInHandAction(CardMst.GetUnrestrictedRandomPart(), 1));
     }
 }

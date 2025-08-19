@@ -26,8 +26,8 @@ public class DamageCardsInHandAction extends AbstractGameAction {
     public DamageCardsInHandAction(int amount, boolean random) {
         this.amount = amount;
         this.random = random;
-        anyNumber = !random;
-        canPickZero = anyNumber;
+        anyNumber = false;
+        canPickZero = false;
         matcher = c -> true;
         msg = I18nManager.MT("DamageCardAction");
         firstFramed = false;

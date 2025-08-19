@@ -13,7 +13,6 @@ import rs.moranzc.akwisadel.characters.CharWisadel;
 import rs.moranzc.akwisadel.core.Kazdel;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.function.BiConsumer;
 
 public class EWSkinNovaDD extends AKCharSkinDDBase {

@@ -28,6 +28,8 @@ public abstract class EWCardModifierBase extends AbstractCardModifier {
     }
     
     protected void addTip(String title, String desc) {
+        if (title == null || title.isEmpty() || desc == null || desc.isEmpty())
+            return;
         if (tips.stream().noneMatch(t -> t.title.equals(title))) {
             tips.add(new TooltipInfo(title, desc));
         } else {

@@ -5,10 +5,16 @@ import rs.moranzc.akwisadel.base.EWBombCardBase;
 
 public class IncreaseBombDamageAction extends AbstractGameAction {
     private final EWBombCardBase bomb;
+    private boolean permanent;
     
     public IncreaseBombDamageAction(EWBombCardBase bomb, int amount) {
+        this(bomb, amount, false);
+    }
+
+    public IncreaseBombDamageAction(EWBombCardBase bomb, int amount, boolean permanent) {
         this.bomb = bomb;
         this.amount = amount;
+        this.permanent = permanent;
         actionType = ActionType.CARD_MANIPULATION;
     }
     
@@ -17,6 +23,9 @@ public class IncreaseBombDamageAction extends AbstractGameAction {
         isDone = true;
         if (bomb != null) {
             bomb.increaseDamageForCombat(amount);
+            if (permanent) {
+                bomb.increaseDamageForRun(amount);
+            }
         }
     }
 }

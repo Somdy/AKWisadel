@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -7,6 +8,7 @@ import rs.moranzc.akwisadel.actions.common.DamageCardsInHandAction;
 import rs.moranzc.akwisadel.actions.common.MendCardsInHandAction;
 import rs.moranzc.akwisadel.base.EWCardBase;
 
+@AutoAdd.Ignore
 public class Recycling extends EWCardBase {
     public static final String ID = MakeID(Recycling.class.getSimpleName());
     
@@ -18,7 +20,7 @@ public class Recycling extends EWCardBase {
     @Override
     protected void onUse(AbstractPlayer s, AbstractCreature t) {
         addToBot(new GainBlockAction(s, s, block));
-        addToBot(new DamageCardsInHandAction(1, !upgraded).canPickZero(false).anyNumber(false));
+        addToBot(new DamageCardsInHandAction(1, !upgraded));
         addToBot(new MendCardsInHandAction(1, !upgraded).canPickZero(true).anyNumber(true));
     }
 

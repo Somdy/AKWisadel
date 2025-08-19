@@ -12,7 +12,7 @@ public class ExplosiveDawn extends EWCardBase {
     public static final String ID = MakeID(ExplosiveDawn.class.getSimpleName());
     
     public ExplosiveDawn() {
-        super(ID, "ew/ExplosiveDawn.png", 4, CardType.POWER, CardRarity.RARE, CardTarget.SELF);
+        super(ID, "ew/ExplosiveDawn.png", 3, CardType.POWER, CardRarity.RARE, CardTarget.SELF);
         setMagic(1);
         cardsToPreview = new Ammo();
     }

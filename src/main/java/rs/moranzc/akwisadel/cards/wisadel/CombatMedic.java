@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CombatMedic extends EWCardBase implements ICallOnModifierAppliedCard {
+public class CombatMedic extends EWCardBase {
     public static final String ID = MakeID(CombatMedic.class.getSimpleName());
     
     public CombatMedic() {
@@ -42,8 +42,7 @@ public class CombatMedic extends EWCardBase implements ICallOnModifierAppliedCar
         upgradeBlock(2);
         upgradeMagicNumber(1);
     }
-
-    @Override
+    
     public void onModifierApplied(AbstractCardModifier mod) {
         if (DamagedCardModifier.ID.equals(mod.identifier(this))) {
             addToTop(new AbstractGameAction() {

@@ -38,6 +38,6 @@ public class LordOfBombing extends EWCardBase implements IPartCard {
 
     @Override
     public void onAppliedOnBomb(EWBombCardBase card, AbstractPlayer s, AbstractCreature t, float slotEfficiency) {
-        addToBot(new IncreaseBombDamageAction(card, MathUtils.floor(extraMagic * slotEfficiency) ));
+        addToBot(new IncreaseBombDamageAction(card, MathUtils.floor(extraMagic * slotEfficiency), true));
     }
 }

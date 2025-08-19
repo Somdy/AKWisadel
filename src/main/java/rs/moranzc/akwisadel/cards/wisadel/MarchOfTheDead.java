@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -10,6 +11,7 @@ import rs.moranzc.akwisadel.base.EWBombCardBase;
 import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
+@AutoAdd.Ignore
 public class MarchOfTheDead extends EWCardBase {
     public static final String ID = MakeID(MarchOfTheDead.class.getSimpleName());
     

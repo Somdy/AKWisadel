@@ -15,7 +15,7 @@ public class ArmyOfOne extends EWCardBase {
     public static final String ID = MakeID(ArmyOfOne.class.getSimpleName());
     
     public ArmyOfOne() {
-        super(ID, "ew/ArmyOfOne.png", 3, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
+        super(ID, "ew/ArmyOfOne.png", 2, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
         setDamage(8);
     }
 
@@ -30,7 +30,7 @@ public class ArmyOfOne extends EWCardBase {
                             calculateCardDamage(m);
                             addToTop(new SummonRevenantAction(1, r -> {
                                 if (ArmyOfOne.this.upgraded)
-                                    r.takeMove();
+                                    r.takeMove(1);
                             }));
                             addToTop(new DamageAction(m, new DamageInfo(s, damage, damageTypeForTurn), AttackEffect.BLUNT_LIGHT));
                         });

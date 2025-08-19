@@ -2,6 +2,7 @@ package rs.moranzc.akwisadel.cards.wisadel;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -21,6 +22,7 @@ public class Overcharge extends EWCardBase {
     @Override
     public void onUse(AbstractPlayer s, AbstractCreature t) {
         addToBot(new DamageAction(t, new DamageInfo(s, damage, damageTypeForTurn), AbstractGameAction.AttackEffect.BLUNT_LIGHT));
+        addToBot(new MakeTempCardInHandAction(new SupplementaryCharge(), magicNumber));
     }
 
     @Override

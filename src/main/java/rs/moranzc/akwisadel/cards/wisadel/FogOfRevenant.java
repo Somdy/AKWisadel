@@ -12,7 +12,7 @@ public class FogOfRevenant extends EWCardBase {
     
     public FogOfRevenant() {
         super(ID, "ew/FogOfRevenant.png", 1, CardType.POWER, CardRarity.UNCOMMON, CardTarget.SELF);
-        setMagic(1);
+        setMagic(2);
     }
 
     @Override

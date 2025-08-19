@@ -13,6 +13,7 @@ import rs.moranzc.akwisadel.utils.CardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,8 @@ public class MendCardsInHandAction extends AbstractGameAction {
     private String msg;
     private boolean firstFramed;
     private ArrayList<AbstractCard> cardsToReturn;
+    private final List<AbstractCard> cardSelected = new ArrayList<>();
+    private Consumer<List<AbstractCard>> postFunc;
     
     public MendCardsInHandAction(int amount, boolean random) {
         this.amount = amount;
@@ -60,6 +63,11 @@ public class MendCardsInHandAction extends AbstractGameAction {
         if (filter != null) {
             matcher = matcher.and(filter);
         }
+        return this;
+    }
+    
+    public MendCardsInHandAction postSelected(Consumer<List<AbstractCard>> action) {
+        postFunc = action;
         return this;
     }
     
@@ -104,7 +112,13 @@ public class MendCardsInHandAction extends AbstractGameAction {
             p.hand.group = cardsToReturn;
             p.hand.refreshHandLayout();
             addToTop(new MendCardsAction(cardsToMend));
+            cardSelected.addAll(cardsToMend);
         }
         tickDuration();
+        if (isDone) {
+            if (postFunc != null) {
+                postFunc.accept(cardSelected);
+            }
+        }
     }
 }

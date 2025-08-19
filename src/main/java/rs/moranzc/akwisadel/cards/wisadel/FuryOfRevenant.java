@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -9,6 +10,7 @@ import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.characters.CharWisadel;
 import rs.moranzc.akwisadel.powers.GiftPower;
 
+@AutoAdd.Ignore
 public class FuryOfRevenant extends EWCardBase {
     public static final String ID = MakeID(FuryOfRevenant.class.getSimpleName());
     

@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -13,6 +14,7 @@ import rs.moranzc.akwisadel.cards.modifiers.DamagedCardModifier;
 import rs.moranzc.akwisadel.interfaces.cards.ICallOnModifierAppliedCard;
 import rs.moranzc.akwisadel.utils.CardUtils;
 
+@AutoAdd.Ignore
 public class MASH extends EWCardBase implements ICallOnModifierAppliedCard {
     public static final String ID = MakeID(MASH.class.getSimpleName());
     
@@ -42,6 +44,7 @@ public class MASH extends EWCardBase implements ICallOnModifierAppliedCard {
             addToTop(new AbstractGameAction() {
                 @Override
                 public void update() {
+                    isDone = true;
                     CardUtils.MendCard(MASH.this);
                     addToTop(new DrawMatchingCardsAction(1, CardUtils::IsDamaged));
                 }

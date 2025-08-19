@@ -2,7 +2,7 @@
     "${mod.id}:GiftPower": {
         "NAME": "好礼",
         "DESCRIPTIONS": [
-            "造成的伤害减少 #b%1$.1f%% .  #y炸弹 会引爆所有好礼，并造成 #b%2$d 点伤害。"
+            "受到的伤害增加 #b%1$.1f%% .  #y炸弹 会引爆所有好礼，并造成 #b%2$d 点伤害。"
         ]
     },
     "${mod.id}:LocalizedLiquidationPower": {
@@ -14,7 +14,7 @@
     "${mod.id}:DieOfDeathPower": {
         "NAME": "阎王点卯",
         "DESCRIPTIONS": [
-            "在你的回合结束时， #y损毁 %1$d%% 。"
+            "在你的回合结束时， #y损毁 %1$s 。"
         ]
     },
     "${mod.id}:SulkPower": {
@@ -69,7 +69,7 @@
     "${mod.id}:OrderOfRevenantPower": {
         "NAME": "魂灵之令",
         "DESCRIPTIONS": [
-            "所有 #y魂灵之影 在回合结束时额外触发 #b%1$d 次。",
+            "所有 #y魂灵之影 额外造成 #b%1$d 点伤害且最大生命增加 #b%2$d 点。",
             "保留并修复"
         ]
     },
@@ -113,6 +113,19 @@
         "NAME": "魂灵之赠",
         "DESCRIPTIONS": [
             "#b%d 张特殊 #y零件 已加入本场战斗奖励中。"
+        ]
+    },
+    "${mod.id}:SproutingPower": {
+        "NAME": "新芽",
+        "DESCRIPTIONS": [
+            "每当一张牌被 #y修复 ，在本场战斗中将其 #y升级 。战斗结束时， #y升级 本场战斗中最后 #y修复 的牌。"
+        ]
+    },
+    "${mod.id}:WillPower": {
+        "NAME": "临终赠礼",
+        "DESCRIPTIONS": [
+            "在一个 #y魂灵之影 死亡后，从本场战斗未 #y消耗 但已 #y损毁 的牌中选择一张移入手牌并 #y修复 之。",
+            "选择一张修复并移入手牌"
         ]
     }
 }

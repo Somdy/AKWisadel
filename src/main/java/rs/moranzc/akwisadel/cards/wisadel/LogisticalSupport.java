@@ -1,5 +1,6 @@
 package rs.moranzc.akwisadel.cards.wisadel;
 
+import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -7,6 +8,7 @@ import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.powers.AdvancedExtendedPower;
 import rs.moranzc.akwisadel.powers.LogisticalSupportPower;
 
+@AutoAdd.Ignore
 public class LogisticalSupport extends EWCardBase {
     public static final String ID = MakeID(LogisticalSupport.class.getSimpleName());
     

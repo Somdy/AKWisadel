@@ -7,12 +7,16 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import rs.moranzc.akwisadel.cards.wisadel.TearsOfRevenants;
 import rs.moranzc.akwisadel.powers.GiftPower;
+
+import java.util.function.Function;
 
 public class TearsOfRevenantsAction extends AbstractGameAction {
     private final TearsOfRevenants tor;
     private final boolean timesTBD;
+    private Function<AbstractMonster, AbstractPower> powerToApply;
 
     public TearsOfRevenantsAction(TearsOfRevenants tor, AbstractCreature source, AttackEffect effect) {
         this.tor = tor;
@@ -28,6 +32,11 @@ public class TearsOfRevenantsAction extends AbstractGameAction {
         timesTBD = false;
         attackEffect = effect;
         actionType = ActionType.DAMAGE;
+    }
+    
+    public TearsOfRevenantsAction applyPower(Function<AbstractMonster, AbstractPower> powerToApply) {
+        this.powerToApply = powerToApply;
+        return this;
     }
 
     @Override
@@ -48,7 +57,8 @@ public class TearsOfRevenantsAction extends AbstractGameAction {
         if (m != null) {
             tor.applyPowers();
             tor.calculateCardDamage(m);
-            addToTop(new ApplyPowerAction(m, source, new GiftPower(m, tor.magicNumber)));
+            AbstractPower p = powerToApply != null ? powerToApply.apply(m) : new GiftPower(m, tor.magicNumber);
+            addToTop(new ApplyPowerAction(m, source, p));
             addToTop(new DamageAction(m, new DamageInfo(source, tor.damage, tor.damageTypeForTurn), attackEffect));
         }
     }

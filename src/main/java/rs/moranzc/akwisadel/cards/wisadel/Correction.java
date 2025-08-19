@@ -52,6 +52,7 @@ public class Correction extends EWCardBase implements ICallOnModifierAppliedCard
             addToTop(new AbstractGameAction() {
                 @Override
                 public void update() {
+                    isDone = true;
                     CardUtils.MendCard(Correction.this);
                     cpr().discardPile.group.parallelStream().filter(c -> CardUtils.IsDamaged(c) && c != Correction.this)
                             .findAny()

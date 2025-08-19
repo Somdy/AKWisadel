@@ -37,7 +37,7 @@ public class OldsAndYoungs extends EWCardBase implements IPartCard {
     @Override
     public void onAppliedOnBomb(EWBombCardBase card, AbstractPlayer s, AbstractCreature t, float slotEfficiency) {
         addToBot(new IncreaseBombDamageAction(card, MathUtils.floor(magicNumber * slotEfficiency) ));
-        addToBot(new MakeTempCardInHandAction(getEtherealCopy(), MathUtils.floor(2 * slotEfficiency)));
+        addToBot(new MakeTempCardInHandAction(getEtherealCopy(), 2));
     }
     
     private OldsAndYoungs getEtherealCopy() {

@@ -16,7 +16,6 @@ public class MayhemBomb extends EWBombCardBase {
     public MayhemBomb() {
         super(ID, "ew/MayhemBomb.png", 2, 10, CardType.ATTACK, CardRarity.RARE, CardTarget.ENEMY);
         setDamage(7);
-        slotEfficiency = 2.0F;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -21,6 +22,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import rs.moranzc.akcharlib.examples.EWSkinNovaDD;
 import rs.moranzc.akcharlib.interfaces.IAKSkinnableChar;
@@ -28,6 +30,7 @@ import rs.moranzc.akwisadel.cards.wisadel.*;
 import rs.moranzc.akwisadel.core.Kazdel;
 import rs.moranzc.akwisadel.patches.EWEnums;
 import rs.moranzc.akwisadel.powers.ExplosiveDawnPower;
+import rs.moranzc.akwisadel.powers.OrderOfRevenantPower;
 import rs.moranzc.akwisadel.relics.StarterRelicEW;
 
 import java.util.ArrayList;
@@ -74,6 +77,7 @@ public class CharWisadel extends CustomPlayer implements IAKSkinnableChar {
     private String currSkinID = EWSkinNovaDD.ID;
 
     public static final List<AbstractCard> CARDS_DAMAGED_THIS_TURN = new ArrayList<>();
+    public static final List<AbstractCard> CARDS_MENDED_THIS_COMBAT = new ArrayList<>();
     
     public CharWisadel() {
         super("Wisadel", EWEnums.CHAR_WISADEL, ORB_TEXTURES, "AKWisadelAssets/images/topPanel/energyOrb/vfx.png", LAYER_SPEED, 
@@ -94,6 +98,11 @@ public class CharWisadel extends CustomPlayer implements IAKSkinnableChar {
         List<Revenant> summons = new ArrayList<>();
         for (int i = 0; i < amount && revenants.size() < MAX_REVENANTS; i++) {
             Revenant r = new Revenant();
+            AbstractPower p = getPower(OrderOfRevenantPower.POWER_ID);
+            if (p instanceof OrderOfRevenantPower) {
+                r.modifyMaxHp(((OrderOfRevenantPower) p).extraAmt);
+                p.flash();
+            }
             revenants.add(r);
             summons.add(r);
         }
@@ -103,8 +112,12 @@ public class CharWisadel extends CustomPlayer implements IAKSkinnableChar {
     public int blockDamageByRevenant(DamageInfo info, int damage) {
         if (revenants.isEmpty())
             return damage;
-        Revenant r = revenants.get(0);
-        return r.damage(damage, info, this);
+        int damageLeft = damage;
+        for (Revenant r : revenants) {
+            damageLeft = r.damage(damageLeft, info, this);
+            if (!r.dead) break;
+        }
+        return damageLeft;
     }
     
     public int countRevenants() {
@@ -117,14 +130,18 @@ public class CharWisadel extends CustomPlayer implements IAKSkinnableChar {
     
     public void modifyRevenantMoveTimes(int delta) {
         revenants.forEach(r -> {
-            r.moveTimes += delta;
-            if (r.moveTimes < 0)
-                r.moveTimes = 0;
+            r.baseMoveTimes += delta;
+            if (r.baseMoveTimes < 0)
+                r.baseMoveTimes = 0;
         });
     }
-    
+
     public void letRevenantsTakeMove() {
         revenants.forEach(Revenant::takeMove);
+    }
+
+    public void letRevenantsTakeMove(int givenMoveTimes) {
+        revenants.forEach(r -> r.takeMove(givenMoveTimes));
     }
     
     public void forEachLiveRevenant(Consumer<Revenant> action) {
@@ -147,16 +164,25 @@ public class CharWisadel extends CustomPlayer implements IAKSkinnableChar {
         for (int i = 0; i < revenants.size(); i++) {
             Revenant r = revenants.get(i);
             if (r != null) {
-                float initialOffset = 25.0F;
-                float maxAngle = 270.0F;
-                float angle = i * (maxAngle / 3) + initialOffset;
-                float dist = 240.0F * Settings.scale;
-                float cX = dist * MathUtils.cosDeg(angle) + hb.cX + hb.width * 0.25F;
-                float cY = dist * MathUtils.sinDeg(angle) + hb.cY;
-                r.setPosition(cX, cY);
+                Vector2 v = new Vector2(200.0F * Settings.scale, 0);
+                float initialOffset = 0.0F;
+                float maxAngle = 90.0F * MAX_REVENANTS;
+                float angle = i * (maxAngle / MAX_REVENANTS) + initialOffset;
+                v.setAngle(angle);
+                v.add(hb.cX, hb.cY);
+//                float dist = 200.0F * Settings.scale;
+//                float cX = dist * MathUtils.cosDeg(angle) + hb.cX + hb.width * 0.25F;
+//                float cY = dist * MathUtils.sinDeg(angle) + hb.cY;
+                r.setPosition(v.x, v.y);
                 r.update();
             }
         }
+    }
+
+    @Override
+    public void applyStartOfCombatLogic() {
+        CARDS_MENDED_THIS_COMBAT.clear();
+        super.applyStartOfCombatLogic();
     }
 
     @Override
@@ -175,6 +201,7 @@ public class CharWisadel extends CustomPlayer implements IAKSkinnableChar {
     public void onVictory() {
         super.onVictory();
         CARDS_DAMAGED_THIS_TURN.clear();
+        CARDS_MENDED_THIS_COMBAT.clear();
         revenants.clear();
     }
 
@@ -186,6 +213,7 @@ public class CharWisadel extends CustomPlayer implements IAKSkinnableChar {
                 state.addAnimation(0, "Skill_3_Idle", true, 0.0F);
             } else if (c instanceof LocalizedLiquidation) {
                 state.setAnimation(0, "Skill_1", false);
+                state.addAnimation(0, "Idle", true, 0.0F);
             } else {
                 int randomAttack = MathUtils.random(0, 2);
                 if (randomAttack == 0) {

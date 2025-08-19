@@ -16,8 +16,8 @@ public class ScorchedEarth extends EWCardBase {
     public static final String ID = MakeID(ScorchedEarth.class.getSimpleName());
     
     public ScorchedEarth() {
-        super(ID, "ew/DieOfDeath.png", 1, CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF);
-        setBlock(5);
+        super(ID, "ew/ScorchedEarth.png", 1, CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF);
+        setBlock(4);
     }
 
     @Override

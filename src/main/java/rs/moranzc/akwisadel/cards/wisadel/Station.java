@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import rs.moranzc.akwisadel.actions.common.DrawMatchingCardsAction;
 import rs.moranzc.akwisadel.base.EWCardBase;
 import rs.moranzc.akwisadel.cards.modifiers.DamagedCardModifier;
 import rs.moranzc.akwisadel.core.CardMst;
@@ -17,7 +16,7 @@ public class Station extends EWCardBase implements ICallOnModifierAppliedCard {
     public static final String ID = MakeID(Station.class.getSimpleName());
     
     public Station() {
-        super(ID, "ew/Station.png", 2, CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF);
+        super(ID, "ew/Station.png", 1, CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF);
         setMagic(3);
         selfRetain = true;
     }
@@ -29,7 +28,7 @@ public class Station extends EWCardBase implements ICallOnModifierAppliedCard {
             public void update() {
                 isDone = true;
                 for (int i = 0; i < magicNumber; i++) {
-                    AbstractCard c = CardMst.GetRandomPart();
+                    AbstractCard c = CardMst.GetUnrestrictedRandomPart();
                     addToTop(new MakeTempCardInHandAction(c, 1));
                 }
             }
@@ -50,7 +49,7 @@ public class Station extends EWCardBase implements ICallOnModifierAppliedCard {
                 public void update() {
                     isDone = true;
                     CardUtils.MendCard(Station.this);
-                    addToTop(new MakeTempCardInHandAction(CardMst.GetRandomPart(), 1));
+                    addToTop(new MakeTempCardInHandAction(CardMst.GetUnrestrictedRandomPart(), 1));
                 }
             });
         }

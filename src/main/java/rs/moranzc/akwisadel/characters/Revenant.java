@@ -19,10 +19,12 @@ import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.combat.SmallLaserEffect;
+import rs.moranzc.akwisadel.actions.utility.GridCardSelectActionBuilder;
 import rs.moranzc.akwisadel.localization.I18nManager;
 import rs.moranzc.akwisadel.powers.GiftPower;
 import rs.moranzc.akwisadel.powers.LordOfRevenantPower;
 import rs.moranzc.akwisadel.powers.OrderOfRevenantPower;
+import rs.moranzc.akwisadel.powers.WillPower;
 
 public class Revenant {
     private static Texture REVENANT_TEX = ImageMaster.loadImage("AKWisadelAssets/images/char/Revenant.png");
@@ -43,36 +45,31 @@ public class Revenant {
     protected int maxHP;
     protected int currHP;
     protected boolean dead;
+    protected int baseMoveTimes;
     protected int moveTimes;
+    protected boolean isMoveTimesModified;
     
     public Revenant() {
         hb = new Hitbox(WIDTH * Settings.scale, HEIGHT * Settings.scale);
-        maxHP = currHP = 7;
+        maxHP = currHP = 5;
         if (cpr().hasPower(LordOfRevenantPower.POWER_ID)) {
             increaseMaxHpBy(2);
         }
         baseDamage = damage = 2;
         baseGiftToApply = giftToApply = 1;
-        moveTimes = 1;
+        baseMoveTimes = moveTimes = 1;
     }
     
     public void setPosition(float cX, float cY) {
         hb.move(cX, cY);
     }
     
-    public void takeMove() {
+    public void takeMove(int givenMoveTimes) {
         AbstractDungeon.actionManager.addToBottom(new AbstractGameAction() {
             @Override
             public void update() {
                 isDone = true;
-                if (AbstractDungeon.player instanceof CharWisadel) {
-                    AbstractPower p = AbstractDungeon.player.getPower(OrderOfRevenantPower.POWER_ID);
-                    if (p != null) {
-                        moveTimes += p.amount;
-                        p.flash();
-                    }
-                }
-                for (int i = 0; i < moveTimes; i++) {
+                for (int i = 0; i < givenMoveTimes; i++) {
                     AbstractMonster m = AbstractDungeon.getMonsters().getRandomMonster(true);
                     if (m != null && !m.isDeadOrEscaped()) {
                         addToTop(new ApplyPowerAction(m, cpr(), new GiftPower(m, giftToApply)));
@@ -84,24 +81,50 @@ public class Revenant {
         });
     }
     
+    public void takeMove() {
+        takeMove(moveTimes);
+    }
+    
     public void increaseMaxHpBy(int times) {
         maxHP *= times;
         currHP *= times;
+    }
+
+    public void modifyMaxHp(int delta) {
+        maxHP += delta;
+        currHP += delta;
+    }
+    
+    public void modifyBaseDamage(int delta) {
+        baseDamage += delta;
+        applyPowers();
     }
     
     public int damage(int damage, DamageInfo info, CharWisadel ew) {
         currHP -= damage;
         dead = currHP <= 0;
         if (dead) {
+            die();
             return Math.abs(currHP);
         }
         return 0;
     }
     
+    public void die() {
+        AbstractPower p = cpr().getPower(WillPower.POWER_ID);
+        if (p instanceof WillPower) {
+            p.onSpecificTrigger();
+        }
+    }
+    
     public void applyPowers() {
         float cDamage = baseDamage;
         float cGift = baseGiftToApply;
-        AbstractPower p = cpr().getPower(LordOfRevenantPower.POWER_ID);
+        AbstractPower p = cpr().getPower(OrderOfRevenantPower.POWER_ID);
+        if (p instanceof OrderOfRevenantPower) {
+            cDamage += p.amount;
+        }
+        p = cpr().getPower(LordOfRevenantPower.POWER_ID);
         if (p instanceof LordOfRevenantPower) {
             cDamage *= 2.0F;
             cGift *= 2.0F;
@@ -110,6 +133,14 @@ public class Revenant {
         giftToApply = MathUtils.floor(cGift);
         isDamageModified = damage != baseDamage;
         isGiftToApplyModified = giftToApply != baseGiftToApply;
+        
+        float cMoveTimes = baseMoveTimes;
+//        p = cpr().getPower(OrderOfRevenantPower.POWER_ID);
+//        if (p instanceof OrderOfRevenantPower) {
+//            cMoveTimes += p.amount;
+//        }
+        moveTimes = MathUtils.floor(cMoveTimes);
+        isMoveTimesModified = moveTimes != baseMoveTimes;
     }
     
     public void update() {
@@ -124,7 +155,7 @@ public class Revenant {
     public void render(SpriteBatch sb) {
         hb.render(sb);
         sb.setColor(Color.WHITE.cpy());
-        sb.draw(REVENANT_TEX, hb.x, hb.y, WIDTH / 2.0F, HEIGHT / 2.0F, WIDTH, HEIGHT, Settings.scale, Settings.scale, 
+        sb.draw(REVENANT_TEX, hb.x, hb.y + 10.0F * Settings.scale, WIDTH / 2.0F, HEIGHT / 2.0F, WIDTH, HEIGHT, Settings.scale, Settings.scale, 
                 0.0F, 0, 0, WIDTH, HEIGHT, false, false);
         FontHelper.renderFontCentered(sb, FontHelper.energyNumFontRed, currHP + "/" + maxHP, hb.cX, hb.y - 15.0F * Settings.scale);
         FontHelper.renderFont(sb, FontHelper.energyNumFontRed, String.valueOf(damage), hb.cX - hb.width * 0.2F, hb.y + hb.height,
