@@ -77,7 +77,7 @@
     "BreathOfRevenant.Desc": "召唤一个 ${mod.id}:魂灵之影 。 NL 对所有敌人造成等同于 *魂灵之影 血量总和的伤害。",
     "ThePresent.Name": "“好礼”",
     "ThePresent.Desc": "造成 !D! 点伤害。 NL 可以引爆 ${mod.id}:好礼 ，使其造成 !M! 倍伤害。",
-    "FlashBomb.Name": "闪光炸弹",
+    "FlashBomb.Name": "闪光弹",
     "FlashBomb.Desc": "${mod.id}:插槽 !${mod.id}:slot! NL 造成 !D! 点伤害。 NL 此炸弹 *插槽 中每有一张 ${mod.id}:零件 ，就给予所有敌人 !M! 层 虚弱 。",
 
     "!SkillCards": "技能牌",
@@ -131,7 +131,7 @@
     "Replenishment.Name": "再生产",
     "Replenishment.Desc": "消耗 NL 消耗 手牌中所有 ${mod.id}:零件牌 ，每 *消耗 一张，抽一张牌并获得 [E] .",
     "Replenishment.UpgradeDesc": "消耗 ， 保留 NL 消耗 手牌中所有 ${mod.id}:零件牌 ，每 *消耗 一张，抽一张牌并获得 [E] .",
-    "LordOfBombing.Name": "轰炸之王",
+    "LordOfBombing.Name": "王庭之主",
     "LordOfBombing.Desc": "${mod.id}:零件 ， 消耗 NL 抽 !M! 张 ${mod.id}:炸弹 。被 *炸弹 选中时，永久增加对应 *炸弹 !${mod.id}:eM! 点伤害。",
     "MemorialEcho.Name": "追悼",
     "MemorialEcho.Desc": "选择一张已 消耗 的 ${mod.id}:损毁 的牌，将其 ${mod.id}:修复 并放入你的手牌。 消耗 。",

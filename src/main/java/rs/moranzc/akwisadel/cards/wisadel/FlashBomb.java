@@ -29,7 +29,9 @@ public class FlashBomb extends EWBombCardBase {
             public void update() {
                 isDone = true;
                 int count = (int) cardsToDamage.stream().filter(c -> c instanceof IPartCard).count();
-                addToTop(new ApplyPowerToEnemiesAction(s, m -> new WeakPower(m, count, false)));
+                if (count > 0) {
+                    addToTop(new ApplyPowerToEnemiesAction(s, m -> new WeakPower(m, count, false)));
+                }
             }
         });
     }

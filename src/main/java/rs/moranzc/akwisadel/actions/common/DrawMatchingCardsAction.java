@@ -20,14 +20,18 @@ public class DrawMatchingCardsAction extends AbstractGameAction {
     private boolean sorted;
     private boolean discardIncluded;
     private boolean clearHistory;
-    
+
     public DrawMatchingCardsAction(int amount, Predicate<AbstractCard> matcher) {
+        this(amount, true, matcher);
+    }
+
+    public DrawMatchingCardsAction(int amount, boolean clearHistory, Predicate<AbstractCard> matcher) {
         this.amount = amount;
         this.matcher = matcher;
         discardIncluded = true;
         shuffleCheck = false;
         sorted = false;
-        clearHistory = true;
+        this.clearHistory = clearHistory;
         followUpAction = new ShellAction(null);
     }
     
@@ -43,6 +47,10 @@ public class DrawMatchingCardsAction extends AbstractGameAction {
 
     @Override
     public void update() {
+        if (clearHistory) {
+            DrawCardAction.drawnCards.clear();
+            clearHistory = false;
+        }
         AbstractPlayer p = AbstractDungeon.player;
         if (p.hasPower(NoDrawPower.POWER_ID)) {
             p.getPower(NoDrawPower.POWER_ID).flash();
@@ -74,7 +82,7 @@ public class DrawMatchingCardsAction extends AbstractGameAction {
                     amount = drawSize + discardSize;
                 }
                 if (amount > drawSize) {
-                    addToTop(new DrawMatchingCardsAction(amount, matcher)
+                    addToTop(new DrawMatchingCardsAction(amount, false, matcher)
                             .followUp(followUpAction.action)
                             .discardIncluded(discardIncluded));
                     addToTop(new EmptyDeckShuffleAction());

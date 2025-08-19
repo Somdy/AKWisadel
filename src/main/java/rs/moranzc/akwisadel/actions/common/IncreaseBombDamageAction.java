@@ -1,6 +1,7 @@
 package rs.moranzc.akwisadel.actions.common;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import rs.moranzc.akwisadel.base.EWBombCardBase;
 
 public class IncreaseBombDamageAction extends AbstractGameAction {
@@ -24,7 +25,9 @@ public class IncreaseBombDamageAction extends AbstractGameAction {
         if (bomb != null) {
             bomb.increaseDamageForCombat(amount);
             if (permanent) {
-                bomb.increaseDamageForRun(amount);
+                AbstractDungeon.player.masterDeck.group.stream().filter(c -> c.uuid == bomb.uuid && c instanceof EWBombCardBase)
+                        .map(c -> (EWBombCardBase) c)
+                        .forEach(c -> c.increaseDamageForRun(amount));
             }
         }
     }
